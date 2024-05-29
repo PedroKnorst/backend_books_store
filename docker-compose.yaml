@@ -1,0 +1,17 @@
+services:
+  booksstore:
+    image: postgres
+    container_name: books_database
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=marvel
+      - POSTGRES_PASSWORD=marvel123
+      - POSTGRES_DB=booksdb
+    volumes:
+      - pgdata:/data/postgres
+
+volumes:
+  pgdata:
+    driver: local
