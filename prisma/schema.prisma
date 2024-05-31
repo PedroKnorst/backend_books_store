@@ -2,38 +2,110 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./ERD.svg"
+  theme    = "dark"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id            String      @id @default(uuid())
+  id            String       @id @default(uuid())
   name          String
   email         String
   phone         String?
   password      String
-  profile       UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId String
+  Salesperson   Salesperson? @relation(fields: [salespersonId], references: [id])
+  salespersonId String?
+  Client        Client?      @relation(fields: [clientId], references: [id])
+  clientId      String?
 
   @@map("users")
 }
 
-model UserProfile {
+model Salesperson {
   id      String @id @default(uuid())
   User    User[]
   balance Float?
+  Sale    Sale[]
+  Books   Book[]
 
-  @@map("user_profiles")
+  @@map("salespersons")
 }
 
-model Books {
-  id          String   @id @default(uuid())
-  title       String
-  author      String
-  character   String
-  publishDate DateTime
-  description String
+model Client {
+  id        String  @id @default(uuid())
+  User      User[]
+  Payment   Payment @relation(fields: [paymentId], references: [id])
+  paymentId String
+
+  @@map("clients")
+}
+
+model Book {
+  id            String       @id @default(uuid())
+  title         String
+  author        String
+  character     String
+  publishDate   DateTime
+  description   String
+  BookCart      BookCart[]
+  price         Float
+  storage       Int
+  Salesperson   Salesperson? @relation(fields: [salespersonId], references: [id])
+  salespersonId String?
 
   @@map("books")
+}
+
+model Sale {
+  id            String      @id @default(uuid())
+  Cart          Cart        @relation(fields: [cartId], references: [id])
+  cartId        String
+  Payment       Payment     @relation(fields: [paymentId], references: [id])
+  paymentId     String
+  Salesperson   Salesperson @relation(fields: [salespersonId], references: [id])
+  salespersonId String
+
+  @@map("sales")
+}
+
+model Cart {
+  id         String     @id @default(uuid())
+  BooksCart  BookCart[]
+  totalPrice Float
+  Sale       Sale[]
+
+  @@map("carts")
+}
+
+model BookCart {
+  id         String  @id @default(uuid())
+  bookId     String
+  quantity   Int
+  totalPrice Float
+  Book       Book    @relation(fields: [bookId], references: [id])
+  Cart       Cart?   @relation(fields: [cartId], references: [id])
+  cartId     String?
+
+  @@map("book_carts")
+}
+
+model Payment {
+  id     String      @id @default(uuid())
+  type   PaymentType @default(CASH)
+  Client Client[]
+  Sale   Sale[]
+
+  @@map("payments")
+}
+
+enum PaymentType {
+  CASH
+  CREDITCARD
+  DEBITCARD
 }
