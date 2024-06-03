@@ -16,7 +16,7 @@ datasource db {
 model User {
   id            String       @id @default(uuid())
   name          String
-  email         String
+  email         String       @unique
   phone         String?
   password      String
   Salesperson   Salesperson? @relation(fields: [salespersonId], references: [id])
@@ -29,9 +29,9 @@ model User {
 
 model Salesperson {
   id      String @id @default(uuid())
-  User    User[]
+  Users   User[]
   balance Float?
-  Sale    Sale[]
+  Sales   Sale[]
   Books   Book[]
 
   @@map("salespersons")
@@ -39,7 +39,7 @@ model Salesperson {
 
 model Client {
   id        String  @id @default(uuid())
-  User      User[]
+  Users     User[]
   Payment   Payment @relation(fields: [paymentId], references: [id])
   paymentId String
 
@@ -53,7 +53,7 @@ model Book {
   character     String
   publishDate   DateTime
   description   String
-  BookCart      BookCart[]
+  BookCarts     BookCart[]
   price         Float
   storage       Int
   Salesperson   Salesperson? @relation(fields: [salespersonId], references: [id])
@@ -78,7 +78,7 @@ model Cart {
   id         String     @id @default(uuid())
   BooksCart  BookCart[]
   totalPrice Float
-  Sale       Sale[]
+  Sales      Sale[]
 
   @@map("carts")
 }
@@ -96,10 +96,10 @@ model BookCart {
 }
 
 model Payment {
-  id     String      @id @default(uuid())
-  type   PaymentType @default(CASH)
-  Client Client[]
-  Sale   Sale[]
+  id      String      @id @default(uuid())
+  type    PaymentType @default(CASH)
+  Clients Client[]
+  Sales   Sale[]
 
   @@map("payments")
 }
