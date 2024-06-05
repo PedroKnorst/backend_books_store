@@ -7,8 +7,8 @@ export class CreateUserController {
 
     const createUser = makeCreateUserUseCase();
 
-    const user = createUser.execute({ name, email, password, phone });
+    const user = await createUser.execute({ name, email, password, phone });
 
-    return res.json(user);
+    return res.status(201).json(user);
   }
 }

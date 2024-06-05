@@ -6,6 +6,7 @@ const CreateUser = new CreateUserController();
 
 const userRoutes = Router();
 
-userRoutes.post('/', CreateUser.handle);
+userRoutes.post('/create', CreateUser.handle);
+userRoutes.post('/login');
 
 export { userRoutes };

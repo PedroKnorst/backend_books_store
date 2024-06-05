@@ -1,21 +1,25 @@
 import { CreateUserDTO } from '#modules/User/dtos/CreateUserDTO.js';
-import { IUser } from '#modules/User/entities/User.js';
 import { IUsersRepository } from '#modules/User/repository/types/IUsersRepository.js';
 import { hash } from 'bcrypt';
+import { IUser } from '../../entities/User';
+import { AppError } from '#/http/middlewares/ErrorHandler';
 
 export class CreateUserUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
-  async execute(data: CreateUserDTO): Promise<IUser> {
+  async execute(data: CreateUserDTO): Promise<Omit<IUser, 'password'>> {
+    const userAlreadyExists = await this.usersRepository.findByEmail(data.email);
+    if (userAlreadyExists) throw new AppError('Ja existe um usuário com este email!');
+
     const hashedPassword = await hash(data.password, 8);
 
     const updatedUserData = {
       ...data,
-      password: hashedPassword
-    }
+      password: hashedPassword,
+    };
 
     const user = await this.usersRepository.create(updatedUserData);
 
-    return user;
+    return { name: user.name, email: user.email, phone: user.phone };
   }
 }

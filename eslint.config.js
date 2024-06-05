@@ -1,5 +1,5 @@
-import pluginJs from "@eslint/js";
-import eslintConfigPrettier from "eslint-config-prettier";
+import pluginJs from '@eslint/js';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default [
   pluginJs.configs.recommended,
@@ -7,7 +7,7 @@ export default [
   {
     languageOptions: {
       parserOptions: {
-        project: ["./tsconfig.json"],
+        project: ['./tsconfig.json'],
         tsconfigRootDir: import.meta.dirname,
       },
     },
