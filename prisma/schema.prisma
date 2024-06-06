@@ -19,9 +19,9 @@ model User {
   email         String       @unique
   phone         String?
   password      String
-  Salesperson   Salesperson? @relation(fields: [salespersonId], references: [id])
+  Salesperson   Salesperson?
   salespersonId String?
-  Client        Client?      @relation(fields: [clientId], references: [id])
+  Client        Client?
   clientId      String?
 
   @@map("users")
@@ -29,19 +29,22 @@ model User {
 
 model Salesperson {
   id      String @id @default(uuid())
-  Users   User[]
-  balance Float?
+  User    User   @relation(fields: [userId], references: [id])
+  balance Float? @default(0)
   Sales   Sale[]
   Books   Book[]
+  userId  String @unique
 
   @@map("salespersons")
 }
 
 model Client {
-  id        String  @id @default(uuid())
-  Users     User[]
-  Payment   Payment @relation(fields: [paymentId], references: [id])
-  paymentId String
+  id       String    @id @default(uuid())
+  User     User      @relation(fields: [userId], references: [id])
+  userId   String    @unique
+  Payments Payment[]
+  Cart     Cart      @relation(fields: [cartId], references: [id])
+  cartId   String    @unique
 
   @@map("clients")
 }
@@ -79,6 +82,7 @@ model Cart {
   BooksCart  BookCart[]
   totalPrice Float
   Sales      Sale[]
+  Client     Client?
 
   @@map("carts")
 }
@@ -96,10 +100,11 @@ model BookCart {
 }
 
 model Payment {
-  id      String      @id @default(uuid())
-  type    PaymentType @default(CASH)
-  Clients Client[]
-  Sales   Sale[]
+  id       String      @id @default(uuid())
+  type     PaymentType @default(CASH)
+  Client   Client      @relation(fields: [clientId], references: [id])
+  Sales    Sale[]
+  clientId String
 
   @@map("payments")
 }

@@ -2,7 +2,7 @@ import prisma from '#/database/PrismaClient';
 import { AppError } from '#/http/middlewares/ErrorHandler';
 import { config } from 'dotenv-safe';
 import { NextFunction, Request, Response } from 'express';
-import { verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 config();
 
@@ -19,7 +19,7 @@ export async function verifyJWT(req: Request, res: Response, next: NextFunction)
   }
 
   try {
-    const { id } = verify(token, SECRET) as IPayload;
+    const { id } = jwt.verify(token, SECRET) as IPayload;
 
     const userExists = await prisma.user.findFirst({ where: { id } });
 

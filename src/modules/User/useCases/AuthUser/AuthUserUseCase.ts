@@ -5,6 +5,8 @@ import { sign } from 'jsonwebtoken';
 import { config } from 'dotenv-safe';
 import { IUser } from '../../entities/User';
 import { AppError } from '#/http/middlewares/ErrorHandler';
+import { validateSchema } from '#/utils/validateSchema';
+import { authUserSchema } from '../../validator/authUser';
 
 config();
 
@@ -14,6 +16,8 @@ export class AuthUserUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
   async execute({ email, password }: IAuthUser): Promise<{ user: Omit<IUser, 'password'>; token: string }> {
+    validateSchema({ email, password }, authUserSchema);
+
     const findUserByEmail = await this.usersRepository.findByEmail(email);
     if (!findUserByEmail) throw new AppError('Email e/ou senha incorreto(s)!');
 
