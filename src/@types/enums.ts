@@ -1,4 +1,4 @@
 export enum Profiles {
-  SALESPERSON,
-  CLIENT,
+  SALESPERSON = 'SALESPERSON',
+  CLIENT = 'CLIENT',
 }

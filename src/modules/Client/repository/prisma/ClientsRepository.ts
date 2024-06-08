@@ -6,7 +6,7 @@ import { CreateClientDTO } from '../../dtos/CreateClientDTO';
 export class ClientsRepository implements IClientsRepository {
   async create(data: CreateClientDTO): Promise<Client> {
     const client = await prisma.client.create({
-      data: { cartId: data.cartId, userId: data.userId },
+      data: { userId: data.userId, Cart: { create: {} } },
     });
 
     return client;

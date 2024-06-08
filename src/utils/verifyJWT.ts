@@ -15,7 +15,9 @@ interface IPayload {
 export async function verifyJWT(req: Request, res: Response, next: NextFunction) {
   const token = req.headers.authorization;
   if (!token) {
-    return next(new AppError('Token não reconhecido! Usuário invalido!', 401));
+    const error = new AppError('Token não reconhecido! Usuário invalido!', 401);
+
+    return next(error);
   }
 
   try {
@@ -30,6 +32,6 @@ export async function verifyJWT(req: Request, res: Response, next: NextFunction)
     next();
   } catch (error) {
     console.log(error);
-    return next(new AppError('Token não reconhecido! Usuário invalido!', 401));
+    throw new AppError('Token não reconhecido! Usuário invalido!', 401);
   }
 }

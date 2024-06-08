@@ -43,8 +43,7 @@ model Client {
   User     User      @relation(fields: [userId], references: [id])
   userId   String    @unique
   Payments Payment[]
-  Cart     Cart      @relation(fields: [cartId], references: [id])
-  cartId   String    @unique
+  Cart     Cart?
 
   @@map("clients")
 }
@@ -80,9 +79,10 @@ model Sale {
 model Cart {
   id         String     @id @default(uuid())
   BooksCart  BookCart[]
-  totalPrice Float
+  totalPrice Float      @default(0)
   Sales      Sale[]
-  Client     Client?
+  Client     Client     @relation(fields: [clientId], references: [id])
+  clientId   String     @unique
 
   @@map("carts")
 }

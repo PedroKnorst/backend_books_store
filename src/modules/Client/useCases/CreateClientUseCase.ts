@@ -11,13 +11,9 @@ export class CreateClientUseCase {
   async execute(data: CreateClientDTO) {
     // validação zod
 
-    // validação se usuario existe e se carrinho existe
-
-    const client = await this.clientsRepository.create({ cartId: data.cartId, userId: data.userId });
+    const client = await this.clientsRepository.create({ userId: data.userId });
 
     await this.paymentsRepository.create({ clientId: client.id });
-
-    // await this.clientsRepository.updateClient({ paymentId: payment.id, id: client.id });
 
     return client;
   }

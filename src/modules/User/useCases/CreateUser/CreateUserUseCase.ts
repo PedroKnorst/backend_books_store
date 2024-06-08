@@ -5,11 +5,13 @@ import { IUser } from '../../entities/User';
 import { AppError } from '#/http/middlewares/ErrorHandler';
 import { validateSchema } from '#/utils/validateSchema';
 import { createUserSchema } from '../../validator/createUser';
+import { makeCreateClientUseCase } from '#/modules/Client/useCases';
+import { makeCreateSalespersonUseCase } from '#/modules/Salesperson/useCases/CreateSalespersonUseCase';
 
 export class CreateUserUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
-  async execute(data: CreateUserDTO): Promise<Omit<IUser, 'password'>> {
+  async execute(data: CreateUserDTO): Promise<Omit<IUser, 'password' | 'id'>> {
     validateSchema(data, createUserSchema);
 
     const userAlreadyExists = await this.usersRepository.findByEmail(data.email);
@@ -24,7 +26,11 @@ export class CreateUserUseCase {
 
     const user = await this.usersRepository.create(updatedUserData);
 
-    
+    if (data.profile === 'CLIENT') {
+      await makeCreateClientUseCase().execute({ userId: user.id });
+    } else if (data.profile === 'SALESPERSON') {
+      await makeCreateSalespersonUseCase().execute({ userId: user.id });
+    }
 
     return { name: user.name, email: user.email, phone: user.phone };
   }

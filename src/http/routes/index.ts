@@ -6,6 +6,6 @@ const router = Router();
 
 router.use('/user', userRoutes);
 
-router.use(verifyJWT);
+// router.use(verifyJWT);
 
 export { router };
