@@ -3,6 +3,7 @@ import { IUsersRepository } from '../types/IUsersRepository';
 import prisma from '#database/PrismaClient';
 import { IUser } from '#modules/User/entities/User.js';
 import { UpdateUserDTO } from '../../dtos/UpdateUserDTO';
+import { Prisma } from '@prisma/client';
 
 export class UsersRepository implements IUsersRepository {
   async create(data: CreateUserDTO): Promise<IUser> {
@@ -19,9 +20,23 @@ export class UsersRepository implements IUsersRepository {
   }
 
   async update(data: UpdateUserDTO): Promise<IUser> {
+    let dataPrisma: Prisma.UserUncheckedUpdateInput = {};
+
+    if (data.clientId) {
+      dataPrisma = { clientId: data.clientId };
+    }
+
+    if (data.salespersonId) {
+      dataPrisma = { salespersonId: data.salespersonId };
+    }
+
+    if (data.name) {
+      dataPrisma = { ...dataPrisma, name: data.name };
+    }
+
     const user = await prisma.user.update({
       where: { id: data.id },
-      data: { Client: { connect: { id: data.clientId } }, Salesperson: { connect: { id: data.salespersonId } } },
+      data: dataPrisma,
     });
 
     //melhorar update

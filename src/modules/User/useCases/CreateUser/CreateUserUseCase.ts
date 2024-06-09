@@ -27,9 +27,11 @@ export class CreateUserUseCase {
     const user = await this.usersRepository.create(updatedUserData);
 
     if (data.profile === 'CLIENT') {
-      await makeCreateClientUseCase().execute({ userId: user.id });
+      const client = await makeCreateClientUseCase().execute({ userId: user.id });
+      await this.usersRepository.update({ clientId: client.id, id: user.id });
     } else if (data.profile === 'SALESPERSON') {
-      await makeCreateSalespersonUseCase().execute({ userId: user.id });
+      const salesperson = await makeCreateSalespersonUseCase().execute({ userId: user.id });
+      await this.usersRepository.update({ salespersonId: salesperson.id, id: user.id });
     }
 
     return { name: user.name, email: user.email, phone: user.phone };

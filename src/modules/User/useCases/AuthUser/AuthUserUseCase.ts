@@ -1,7 +1,7 @@
 import { compare } from 'bcrypt';
 import { IAuthUser } from '../../dtos/AuthUserDTO';
 import { IUsersRepository } from '../../repository/types/IUsersRepository';
-import { sign } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { config } from 'dotenv-safe';
 import { IUser } from '../../entities/User';
 import { AppError } from '#/http/middlewares/ErrorHandler';
@@ -25,7 +25,7 @@ export class AuthUserUseCase {
 
     if (!matchPassword) throw new AppError('Email e/ou senha incorreto(s)!');
 
-    const token = sign({ id: findUserByEmail.id }, SECRET);
+    const token = jwt.sign({ id: findUserByEmail.id }, SECRET);
 
     return { user: findUserByEmail, token };
   }
