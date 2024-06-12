@@ -51,13 +51,13 @@ model Client {
 model Book {
   id            String       @id @default(uuid())
   title         String
-  author        String
-  character     String
+  authors       String[]
+  characters    String[]
   publishDate   DateTime
   description   String
   BookCarts     BookCart[]
   price         Float
-  storage       Int
+  storage       Int          @default(0)
   Salesperson   Salesperson? @relation(fields: [salespersonId], references: [id])
   salespersonId String?
 
@@ -88,13 +88,13 @@ model Cart {
 }
 
 model BookCart {
-  id         String  @id @default(uuid())
+  id         String @id @default(uuid())
   bookId     String
   quantity   Int
   totalPrice Float
-  Book       Book    @relation(fields: [bookId], references: [id])
-  Cart       Cart?   @relation(fields: [cartId], references: [id])
-  cartId     String?
+  Book       Book   @relation(fields: [bookId], references: [id])
+  Cart       Cart   @relation(fields: [cartId], references: [id])
+  cartId     String
 
   @@map("book_carts")
 }

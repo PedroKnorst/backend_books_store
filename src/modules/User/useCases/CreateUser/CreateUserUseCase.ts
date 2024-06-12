@@ -6,7 +6,7 @@ import { AppError } from '#/http/middlewares/ErrorHandler';
 import { validateSchema } from '#/utils/validateSchema';
 import { createUserSchema } from '../../validator/createUser';
 import { makeCreateClientUseCase } from '#/modules/Client/useCases';
-import { makeCreateSalespersonUseCase } from '#/modules/Salesperson/useCases/CreateSalespersonUseCase';
+import { makeCreateSalespersonUseCase } from '#/modules/Salesperson/useCases/CreateSalesperson';
 import jwt from 'jsonwebtoken';
 import { config } from 'dotenv-safe';
 
