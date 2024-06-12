@@ -7,11 +7,22 @@ import { validateSchema } from '#/utils/validateSchema';
 import { createUserSchema } from '../../validator/createUser';
 import { makeCreateClientUseCase } from '#/modules/Client/useCases';
 import { makeCreateSalespersonUseCase } from '#/modules/Salesperson/useCases/CreateSalespersonUseCase';
+import jwt from 'jsonwebtoken';
+import { config } from 'dotenv-safe';
+
+config();
+
+const SECRET = process.env.SECRET || '12345';
+
+interface ICreateUserResponse {
+  user: Omit<IUser, 'password' | 'id'>;
+  token: string;
+}
 
 export class CreateUserUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
-  async execute(data: CreateUserDTO): Promise<Omit<IUser, 'password' | 'id'>> {
+  async execute(data: CreateUserDTO): Promise<ICreateUserResponse> {
     validateSchema(data, createUserSchema);
 
     const userAlreadyExists = await this.usersRepository.findByEmail(data.email);
@@ -34,6 +45,17 @@ export class CreateUserUseCase {
       await this.usersRepository.update({ salespersonId: salesperson.id, id: user.id });
     }
 
-    return { name: user.name, email: user.email, phone: user.phone };
+    const token = jwt.sign({ id: user.id }, SECRET);
+
+    return {
+      user: {
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        salespersonId: user.salespersonId,
+        clientId: user.clientId,
+      },
+      token,
+    };
   }
 }

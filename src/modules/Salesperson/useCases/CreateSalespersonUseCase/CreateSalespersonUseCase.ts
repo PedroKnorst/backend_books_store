@@ -14,7 +14,7 @@ export class CreateSalespersonUseCase {
 
     const userAlreadyExists = await this.usersRepository.findById(data.userId);
 
-    if (userAlreadyExists) throw new AppError('Este usuário ja tem um perfil de vendedor');
+    if (userAlreadyExists?.salespersonId) throw new AppError('Este usuário ja tem um perfil de vendedor');
 
     const salesperson = await this.salespersonRepository.create(data);
 

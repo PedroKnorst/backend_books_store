@@ -12,10 +12,15 @@ config();
 
 const SECRET = process.env.SECRET || '12345';
 
+interface IAuthUserResponse {
+  user: Omit<IUser, 'password' | 'id'>;
+  token: string;
+}
+
 export class AuthUserUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
-  async execute({ email, password }: IAuthUser): Promise<{ user: Omit<IUser, 'password'>; token: string }> {
+  async execute({ email, password }: IAuthUser): Promise<IAuthUserResponse> {
     validateSchema({ email, password }, authUserSchema);
 
     const findUserByEmail = await this.usersRepository.findByEmail(email);
@@ -27,6 +32,15 @@ export class AuthUserUseCase {
 
     const token = jwt.sign({ id: findUserByEmail.id }, SECRET);
 
-    return { user: findUserByEmail, token };
+    return {
+      user: {
+        name: findUserByEmail.name,
+        email: findUserByEmail.email,
+        phone: findUserByEmail.phone,
+        salespersonId: findUserByEmail.salespersonId,
+        clientId: findUserByEmail.clientId,
+      },
+      token,
+    };
   }
 }
