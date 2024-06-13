@@ -53,7 +53,8 @@ model Book {
   title         String
   authors       String[]
   characters    String[]
-  publishDate   DateTime
+  publishDate   DateTime?
+  category      BookCategory
   description   String
   BookCarts     BookCart[]
   price         Float
@@ -113,4 +114,17 @@ enum PaymentType {
   CASH
   CREDITCARD
   DEBITCARD
+}
+
+enum BookCategory {
+  HORROR
+  ROMANCE
+  SCIENCEFICTION
+  REMAKE
+  CRIME
+  INFANTIL
+  FILOSOFIC
+  HISTORIC
+  ACTION
+  OTHER
 }

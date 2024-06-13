@@ -1,33 +1,23 @@
 import prisma from '#/database/PrismaClient';
-import { Prisma } from '@prisma/client';
+import { Book, Prisma } from '@prisma/client';
 import { CreateBookDTO } from '../../dtos/CreateBookDTO';
 import { IBooksRepository, IGetBooksFilters, IGetComicBooksFilters } from '../@types/IBooksRepository';
 import { GetMarvelComicBooksDTO } from '../../dtos/GetMarvelComicBooksDTO';
-import axios from 'axios';
 import { getMarvelComicBooks } from '#/http/services/MarvelAPI/comicBooks.routes';
 import { AppError } from '#/http/middlewares/ErrorHandler';
 
 export class BooksRepository implements IBooksRepository {
-  async create(data: CreateBookDTO): Promise<{
-    id: string;
-    title: string;
-    author: string;
-    character: string;
-    publishDate: Date;
-    description: string;
-    price: number;
-    storage: number;
-    salespersonId: string | null;
-  }> {
+  async create(data: CreateBookDTO): Promise<Book> {
     const book = await prisma.book.create({
       data: {
-        author: data.author,
-        character: data.character,
+        authors: { set: data.authors },
+        characters: { set: data.characters },
         description: data.description,
         price: data.price,
         publishDate: data.publishDate,
         storage: data.storage,
         title: data.title,
+        category: data.category,
         Salesperson: { connect: { id: data.salespersonId } },
       },
     });
@@ -37,17 +27,7 @@ export class BooksRepository implements IBooksRepository {
 
   async getBooksWithFilter(filters: IGetBooksFilters): Promise<{
     total: number;
-    books: {
-      id: string;
-      title: string;
-      author: string;
-      character: string;
-      publishDate: Date;
-      description: string;
-      price: number;
-      storage: number;
-      salespersonId: string | null;
-    }[];
+    books: Book[];
   }> {
     const { page, size, author, character, title } = filters;
 
@@ -58,9 +38,11 @@ export class BooksRepository implements IBooksRepository {
       take: size, //Take ±n Books from the position of the cursor.
     };
 
-    if (author) where.author = author;
+    // if (author) {
+    //   where.authors.hasSome = author;
+    // }
 
-    if (character) where.character = character;
+    // if (character) where.characters = character;
 
     if (title) where.title = title;
 
@@ -81,9 +63,9 @@ export class BooksRepository implements IBooksRepository {
       title: book.title,
       description: book.description,
       pageCount: book.pageCount,
-      prices: book.prices.map((price: number) => price),
-      authors: book.creators.items.map((author: string) => author),
-      characters: book.characters.items.map((author: string) => author),
+      prices: book.prices.map((typePrice: { price: number }) => typePrice.price),
+      authors: book.creators.items.map((author: { name: string }) => author.name),
+      characters: book.characters.items.map((character: { name: string }) => character.name),
       publishDate: new Date(
         book.dates.find((publishDate: { type: string; date: string }) => publishDate.type === 'onsaleDate').date
       ),

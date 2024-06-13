@@ -13,4 +13,10 @@ export class SalespersonRepository implements ISalespersonRepository {
 
     return salesperson;
   }
+
+  async findById(id: string): Promise<Salesperson | null> {
+    const salesperson = await prisma.salesperson.findFirst({ where: { id } });
+
+    return salesperson;
+  }
 }

@@ -1,8 +1,8 @@
-import prisma from '#/database/PrismaClient';
-import { AppError } from '#/http/middlewares/ErrorHandler';
 import { config } from 'dotenv-safe';
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { AppError } from './ErrorHandler';
+import prisma from '#/database/PrismaClient';
 
 config();
 
@@ -13,12 +13,14 @@ interface IPayload {
 }
 
 export async function verifyJWT(req: Request, res: Response, next: NextFunction) {
-  const token = req.headers.authorization;
-  if (!token) {
+  const auth = req.headers.authorization;
+  if (!auth) {
     const error = new AppError('Token não reconhecido! Usuário invalido!', 401);
 
     return next(error);
   }
+
+  const [, token] = auth.split(' ');
 
   try {
     const { id } = jwt.verify(token, SECRET) as IPayload;
