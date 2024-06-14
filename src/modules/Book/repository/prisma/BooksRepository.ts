@@ -1,5 +1,5 @@
 import prisma from '#/database/PrismaClient';
-import { Book, Prisma } from '@prisma/client';
+import { $Enums, Book, Prisma } from '@prisma/client';
 import { CreateBookDTO } from '../../dtos/CreateBookDTO';
 import { IBooksRepository, IGetBooksFilters, IGetComicBooksFilters } from '../@types/IBooksRepository';
 import { GetMarvelComicBooksDTO } from '../../dtos/GetMarvelComicBooksDTO';
@@ -70,5 +70,11 @@ export class BooksRepository implements IBooksRepository {
     }));
 
     return { books: filteredBooks, total: total };
+  }
+
+  async findByid(id: string): Promise<Book | null> {
+    const book = await prisma.book.findFirst({ where: { id } });
+
+    return book;
   }
 }

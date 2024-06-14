@@ -19,4 +19,5 @@ export interface IBooksRepository {
   create(data: CreateBookDTO): Promise<Book>;
   getBooksWithFilter(filters: IGetBooksFilters): Promise<{ total: number; books: Book[] }>;
   getComicBooksFromAPI(filters: IGetComicBooksFilters): Promise<{ total: number; books: GetMarvelComicBooksDTO[] }>;
+  findByid(id: string): Promise<Book | null>;
 }
