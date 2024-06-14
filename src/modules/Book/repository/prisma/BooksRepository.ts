@@ -10,8 +10,8 @@ export class BooksRepository implements IBooksRepository {
   async create(data: CreateBookDTO): Promise<Book> {
     const book = await prisma.book.create({
       data: {
-        authors: { set: data.authors },
-        characters: { set: data.characters },
+        author: data.author,
+        character: data.character,
         description: data.description,
         price: data.price,
         publishDate: data.publishDate,
@@ -38,11 +38,9 @@ export class BooksRepository implements IBooksRepository {
       take: size, //Take ±n Books from the position of the cursor.
     };
 
-    // if (author) {
-    //   where.authors.hasSome = author;
-    // }
+    if (author) where.author = author;
 
-    // if (character) where.characters = character;
+    if (character) where.character = character;
 
     if (title) where.title = title;
 

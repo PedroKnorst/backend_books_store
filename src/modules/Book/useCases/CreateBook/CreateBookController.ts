@@ -3,16 +3,16 @@ import { makeCreateBookUseCase } from '.';
 
 export class CreateBookController {
   async handle(req: Request, res: Response) {
-    const { title, authors, characters, description, price, storage, publishDate, salespersonId, category } = req.body;
+    const { title, author, character, description, price, storage, publishDate, salespersonId, category } = req.body;
 
     const book = await makeCreateBookUseCase().execute({
       title,
-      authors,
-      characters,
+      author,
+      character,
       description,
       price,
       storage,
-      publishDate,
+      publishDate: new Date(publishDate),
       salespersonId,
       category,
     });

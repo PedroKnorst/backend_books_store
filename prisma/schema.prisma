@@ -51,8 +51,8 @@ model Client {
 model Book {
   id            String       @id @default(uuid())
   title         String
-  authors       String[]
-  characters    String[]
+  author        String
+  character     String
   publishDate   DateTime?
   category      BookCategory
   description   String

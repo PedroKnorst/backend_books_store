@@ -4,8 +4,8 @@ import { ISalesperson } from '#/modules/Salesperson/entities/Salesperson';
 export interface IBook {
   id: string;
   title: string;
-  author: string;
-  character: string;
+  authors: string[];
+  characters: string[];
   description: string;
   price: number;
   storage: number;
