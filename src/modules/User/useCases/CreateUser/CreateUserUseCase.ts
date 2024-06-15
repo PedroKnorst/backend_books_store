@@ -45,7 +45,16 @@ export class CreateUserUseCase {
       await this.usersRepository.update({ salespersonId: salesperson.id, id: user.id });
     }
 
-    const token = jwt.sign({ id: user.id }, SECRET);
+    const token = jwt.sign(
+      {
+        id: user.id,
+        clientId: user.clientId,
+        salespersonId: user.salespersonId,
+        Client: user.Client,
+        Salesperson: user.Salesperson,
+      },
+      SECRET
+    );
 
     return {
       user: {
@@ -54,6 +63,8 @@ export class CreateUserUseCase {
         phone: user.phone,
         salespersonId: user.salespersonId,
         clientId: user.clientId,
+        Client: user.Client,
+        Salesperson: user.Salesperson,
       },
       token,
     };

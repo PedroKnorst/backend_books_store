@@ -30,7 +30,16 @@ export class AuthUserUseCase {
 
     if (!matchPassword) throw new AppError('Email e/ou senha incorreto(s)!');
 
-    const token = jwt.sign({ id: findUserByEmail.id }, SECRET);
+    const token = jwt.sign(
+      {
+        id: findUserByEmail.id,
+        clientId: findUserByEmail.clientId,
+        salespersonId: findUserByEmail.salespersonId,
+        Client: findUserByEmail.Client,
+        Salesperson: findUserByEmail.Salesperson,
+      },
+      SECRET
+    );
 
     return {
       user: {
@@ -39,6 +48,8 @@ export class AuthUserUseCase {
         phone: findUserByEmail.phone,
         salespersonId: findUserByEmail.salespersonId,
         clientId: findUserByEmail.clientId,
+        Client: findUserByEmail.Client,
+        Salesperson: findUserByEmail.Salesperson,
       },
       token,
     };
