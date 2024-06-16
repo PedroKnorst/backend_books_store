@@ -8,5 +8,5 @@ export interface ICartRepository {
   removeBookOfCart(data: RemoveBookOfCartDTO): Promise<void>;
   findCartByClient(clientId: string): Promise<ICart | null>;
   create(): Promise<Cart>;
-  update(data: { clientId: string; id: string }): Promise<Cart>;
+  update(data: { clientId?: string; id: string; bookCartId?: string }): Promise<Cart>;
 }

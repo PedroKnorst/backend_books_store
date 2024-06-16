@@ -3,6 +3,7 @@ import { AddBookToCartDTO } from '../../dtos/AddBookToCartDTO';
 import { RemoveBookOfCartDTO } from '../../dtos/RemoveBookOfCartDTO';
 import { ICartRepository } from '../@types/ICartRepository';
 import { ICart } from '../../entities/Cart';
+import { Prisma } from '@prisma/client';
 
 export class CartRepository implements ICartRepository {
   async addBookToCart(data: AddBookToCartDTO): Promise<{ id: string; totalPrice: number; clientId: string | null }> {
@@ -21,7 +22,7 @@ export class CartRepository implements ICartRepository {
   async removeBookOfCart(data: RemoveBookOfCartDTO): Promise<void> {
     await prisma.cart.update({
       where: { id: data.id },
-      data: { BooksCart: { delete: { id: data.id } } },
+      data: { BooksCart: { delete: { id: data.id } }, totalPrice: data.cartTotalPrice },
       include: { BooksCart: true },
     });
   }
@@ -29,7 +30,7 @@ export class CartRepository implements ICartRepository {
   async findCartByClient(clientId: string): Promise<ICart | null> {
     const cart = await prisma.cart.findFirst({
       where: { clientId },
-      include: { BooksCart: { include: { Book: true } } },
+      include: { BooksCart: { include: { Book: { include: { Salesperson: true } } } } },
     });
 
     return cart;
@@ -41,14 +42,25 @@ export class CartRepository implements ICartRepository {
     return cart;
   }
 
-  async update({
-    clientId,
-    id,
-  }: {
-    clientId: string;
+  async update(data: {
+    clientId?: string;
     id: string;
+    bookCartId?: string;
   }): Promise<{ id: string; totalPrice: number; clientId: string | null }> {
-    const cart = await prisma.cart.update({ data: { clientId }, where: { id } });
+    let dataPrisma: Prisma.CartUpdateInput = {};
+
+    if (data.clientId) {
+      dataPrisma.clientId = data.clientId;
+    }
+
+    if (data.bookCartId) {
+      dataPrisma.BooksCart = { disconnect: { id: data.bookCartId } };
+    }
+
+    const cart = await prisma.cart.update({
+      data: dataPrisma,
+      where: { id: data.id },
+    });
 
     return cart;
   }

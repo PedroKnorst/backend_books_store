@@ -5,11 +5,11 @@ import { v4 } from 'uuid';
 
 export interface ISalesperson {
   id: string;
-  User: IUser;
+  User?: IUser;
   userId: string;
-  balance: number;
-  Sales: ISale[];
-  Books: IBook[];
+  balance: number | null;
+  Sales?: ISale[];
+  Books?: IBook[];
 }
 
 export class Salesperson {
