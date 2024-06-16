@@ -5,6 +5,7 @@ import { GetMarvelComicBooksDTO } from '../../dtos/GetMarvelComicBooksDTO';
 export interface IGetBooksFilters {
   page: number;
   size: number;
+  salespersonId?: string;
   title?: string;
   author?: string;
   character?: string;

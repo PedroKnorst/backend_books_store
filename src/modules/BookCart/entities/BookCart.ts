@@ -3,10 +3,10 @@ import { ICart } from '#/modules/Cart/entities/Cart';
 
 export interface IBookCart {
   id: string;
-  quantity: string;
+  quantity: number;
   totalPrice: number;
   bookId: string;
-  Book: IBook;
+  Book?: IBook;
   cartId: string;
-  Cart: ICart;
+  Cart?: ICart;
 }

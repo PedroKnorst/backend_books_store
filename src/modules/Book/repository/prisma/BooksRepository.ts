@@ -29,7 +29,7 @@ export class BooksRepository implements IBooksRepository {
     total: number;
     books: Book[];
   }> {
-    const { page, size, author, character, title } = filters;
+    const { page, size, author, character, title, salespersonId } = filters;
 
     const where: Prisma.BookWhereInput = {};
 
@@ -37,6 +37,8 @@ export class BooksRepository implements IBooksRepository {
       skip: page <= 1 ? 0 : (page - 1) * size, //Skip the first n Books.
       take: size, //Take ±n Books from the position of the cursor.
     };
+
+    if (salespersonId) where.salespersonId = salespersonId;
 
     if (author) where.author = author;
 

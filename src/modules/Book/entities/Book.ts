@@ -4,14 +4,14 @@ import { ISalesperson } from '#/modules/Salesperson/entities/Salesperson';
 export interface IBook {
   id: string;
   title: string;
-  authors: string[];
-  characters: string[];
+  author: string;
+  character: string;
   description: string;
   price: number;
   storage: number;
-  BookCarts: IBookCart[];
-  salespersonId: string;
-  Salesperson: ISalesperson;
+  BookCarts?: IBookCart[];
+  salespersonId: string | null;
+  Salesperson?: ISalesperson;
 }
 
 export class Book {

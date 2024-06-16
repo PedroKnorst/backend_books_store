@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "tsx watch src/http/server.ts",
     "migrate": "npx prisma migrate dev",
+    "create-and-start": "docker-compose up -d && npm run migrate && npm run dev",
     "test": "vitest"
   },
   "keywords": [],

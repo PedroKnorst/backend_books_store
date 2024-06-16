@@ -7,7 +7,9 @@ export class UpdateBookCartController {
 
     const { quantity } = req.body;
 
-    const bookCart = await makeUpdateBookCartUseCase().execute({ id, quantity });
+    const { clientId } = req.user;
+
+    const bookCart = await makeUpdateBookCartUseCase().execute({ id, quantity, clientId });
 
     return res.json(bookCart);
   }

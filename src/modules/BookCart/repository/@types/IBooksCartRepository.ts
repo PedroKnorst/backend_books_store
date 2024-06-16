@@ -4,4 +4,5 @@ import { UpdateBookCartDTO } from '../../dtos/UpdateBookCartDTO';
 export interface IBooksCartRepository {
   update(data: UpdateBookCartDTO): Promise<BookCart>;
   findById(id: string): Promise<BookCart | null>;
+  findByBookId(bookId: string): Promise<BookCart | null>;
 }

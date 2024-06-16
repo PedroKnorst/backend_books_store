@@ -8,11 +8,11 @@ export class AddOrDeleteBookOfCartController {
 
     const { deleteBook } = req.body;
 
-    const { cartId } = req.user.Client;
+    const clientId = req.user.clientId;
 
-    if (!cartId) throw new AppError('Permissão necessária!');
+    if (!clientId) throw new AppError('Permissão necessária!');
 
-    const cart = await makeAddOrDeleteBookOfCartUseCase().execute({ bookId, id: cartId }, deleteBook);
+    const cart = await makeAddOrDeleteBookOfCartUseCase().execute({ bookId, clientId }, deleteBook);
 
     return res.json(cart);
   }

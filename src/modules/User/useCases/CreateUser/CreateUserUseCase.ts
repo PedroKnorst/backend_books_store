@@ -9,6 +9,7 @@ import { makeCreateClientUseCase } from '#/modules/Client/useCases';
 import { makeCreateSalespersonUseCase } from '#/modules/Salesperson/useCases/CreateSalesperson';
 import jwt from 'jsonwebtoken';
 import { config } from 'dotenv-safe';
+import { ICartRepository } from '#/modules/Cart/repository/@types/ICartRepository';
 
 config();
 
@@ -20,7 +21,9 @@ interface ICreateUserResponse {
 }
 
 export class CreateUserUseCase {
-  constructor(private usersRepository: IUsersRepository) {}
+  constructor(
+    private usersRepository: IUsersRepository,
+  ) {}
 
   async execute(data: CreateUserDTO): Promise<ICreateUserResponse> {
     validateSchema(data, createUserSchema);
@@ -39,32 +42,58 @@ export class CreateUserUseCase {
 
     if (data.profile === 'CLIENT') {
       const client = await makeCreateClientUseCase().execute({ userId: user.id });
-      await this.usersRepository.update({ clientId: client.id, id: user.id });
-    } else if (data.profile === 'SALESPERSON') {
-      const salesperson = await makeCreateSalespersonUseCase().execute({ userId: user.id });
-      await this.usersRepository.update({ salespersonId: salesperson.id, id: user.id });
+
+      const updatedUser = await this.usersRepository.update({ clientId: client.id, id: user.id });
+
+      const token = jwt.sign(
+        {
+          id: updatedUser.id,
+          clientId: updatedUser.clientId,
+          salespersonId: updatedUser.salespersonId,
+          Client: updatedUser.Client,
+          Salesperson: updatedUser.Salesperson,
+        },
+        SECRET
+      );
+
+      return {
+        user: {
+          name: updatedUser.name,
+          email: updatedUser.email,
+          phone: updatedUser.phone,
+          salespersonId: updatedUser.salespersonId,
+          clientId: updatedUser.clientId,
+          Client: updatedUser.Client,
+          Salesperson: updatedUser.Salesperson,
+        },
+        token,
+      };
     }
+
+    const salesperson = await makeCreateSalespersonUseCase().execute({ userId: user.id });
+
+    const updatedUser = await this.usersRepository.update({ salespersonId: salesperson.id, id: user.id });
 
     const token = jwt.sign(
       {
-        id: user.id,
-        clientId: user.clientId,
-        salespersonId: user.salespersonId,
-        Client: user.Client,
-        Salesperson: user.Salesperson,
+        id: updatedUser.id,
+        clientId: updatedUser.clientId,
+        salespersonId: updatedUser.salespersonId,
+        Client: updatedUser.Client,
+        Salesperson: updatedUser.Salesperson,
       },
       SECRET
     );
 
     return {
       user: {
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        salespersonId: user.salespersonId,
-        clientId: user.clientId,
-        Client: user.Client,
-        Salesperson: user.Salesperson,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        salespersonId: updatedUser.salespersonId,
+        clientId: updatedUser.clientId,
+        Client: updatedUser.Client,
+        Salesperson: updatedUser.Salesperson,
       },
       token,
     };

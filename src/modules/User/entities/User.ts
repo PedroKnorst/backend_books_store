@@ -9,9 +9,9 @@ export interface IUser {
   phone?: string | null;
   password: string;
   salespersonId?: string | null;
-  Salesperson?: ISalesperson;
+  Salesperson?: ISalesperson | null;
   clientId?: string | null;
-  Client?: IClient;
+  Client?: IClient | null;
 }
 
 export class User {
