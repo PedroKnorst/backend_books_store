@@ -5,6 +5,7 @@ import { IBooksRepository, IGetBooksFilters, IGetComicBooksFilters } from '../@t
 import { GetMarvelComicBooksDTO } from '../../dtos/GetMarvelComicBooksDTO';
 import { getMarvelComicBooks } from '#/http/services/MarvelAPI/comicBooks.routes';
 import { AppError } from '#/http/middlewares/ErrorHandler';
+import { UpdateBookDTO } from '../../dtos/UpdateBookDTO';
 
 export class BooksRepository implements IBooksRepository {
   async create(data: CreateBookDTO): Promise<Book> {
@@ -76,6 +77,32 @@ export class BooksRepository implements IBooksRepository {
 
   async findByid(id: string): Promise<Book | null> {
     const book = await prisma.book.findFirst({ where: { id } });
+
+    return book;
+  }
+
+  async update(data: UpdateBookDTO): Promise<Book> {
+    const { id, author, category, character, description, price, publishDate, storage, title } = data;
+
+    let prismaData: Prisma.BookUpdateInput = {};
+
+    if (author) prismaData.author = author;
+
+    if (category) prismaData.category = category;
+
+    if (character) prismaData.character = character;
+
+    if (description) prismaData.description = description;
+
+    if (price) prismaData.price = price;
+
+    if (publishDate) prismaData.publishDate = publishDate;
+
+    if (storage) prismaData.storage = storage;
+
+    if (title) prismaData.title = title;
+
+    const book = await prisma.book.update({ where: { id }, data: prismaData });
 
     return book;
   }

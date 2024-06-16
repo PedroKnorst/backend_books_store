@@ -1,6 +1,7 @@
 import { Book } from '@prisma/client';
 import { CreateBookDTO } from '../../dtos/CreateBookDTO';
 import { GetMarvelComicBooksDTO } from '../../dtos/GetMarvelComicBooksDTO';
+import { UpdateBookDTO } from '../../dtos/UpdateBookDTO';
 
 export interface IGetBooksFilters {
   page: number;
@@ -21,4 +22,5 @@ export interface IBooksRepository {
   getBooksWithFilter(filters: IGetBooksFilters): Promise<{ total: number; books: Book[] }>;
   getComicBooksFromAPI(filters: IGetComicBooksFilters): Promise<{ total: number; books: GetMarvelComicBooksDTO[] }>;
   findByid(id: string): Promise<Book | null>;
+  update(data: UpdateBookDTO): Promise<Book>;
 }
