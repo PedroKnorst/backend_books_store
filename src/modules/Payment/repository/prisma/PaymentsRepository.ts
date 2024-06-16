@@ -1,12 +1,11 @@
 import { PaymentType } from '@prisma/client';
-import { CreatePaymentDTO } from '../../dtos/CreatePayment';
 import { IPaymentsRepository } from '../@types/IPaymentsRepository';
 import prisma from '#/database/PrismaClient';
 
 export class PaymentsRepository implements IPaymentsRepository {
-  async create(data: CreatePaymentDTO): Promise<{ id: string; type: PaymentType; clientId: string }> {
-    const payment = await prisma.payment.create({
-      data: { Client: { connect: { id: data.clientId } } },
+  async getByClientId(clientId: string): Promise<{ id: string; type: PaymentType; clientId: string } | null> {
+    const payment = await prisma.payment.findFirst({
+      where: { clientId: clientId },
     });
 
     return payment;

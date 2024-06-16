@@ -15,7 +15,7 @@ export class ClientsRepository implements IClientsRepository {
 
   async updateClient(data: { id: string; paymentId: string }): Promise<Client> {
     const client = await prisma.client.update({
-      data: { Payment: { connect: { id: data.paymentId } } },
+      data: { paymentId: data.paymentId },
       where: { id: data.id },
       include: { Payment: true, Cart: { include: { BooksCart: true } } },
     });

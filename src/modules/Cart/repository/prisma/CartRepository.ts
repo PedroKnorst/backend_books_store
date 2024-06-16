@@ -8,7 +8,10 @@ export class CartRepository implements ICartRepository {
   async addBookToCart(data: AddBookToCartDTO): Promise<{ id: string; totalPrice: number; clientId: string | null }> {
     const cart = await prisma.cart.update({
       where: { id: data.id },
-      data: { BooksCart: { create: { quantity: data.quantity, totalPrice: data.totalPrice, bookId: data.bookId } } },
+      data: {
+        BooksCart: { create: { quantity: data.quantity, totalPrice: data.totalPrice, bookId: data.bookId } },
+        totalPrice: data.cartTotalPrice,
+      },
       include: { BooksCart: true },
     });
 
