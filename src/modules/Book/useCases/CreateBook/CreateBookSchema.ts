@@ -8,7 +8,7 @@ export const createBookSchema = z.object({
   description: z.string().min(1, 'A descrição é obrigatória!'),
   price: z.number().refine(price => price >= 0, { message: 'O preço deve ser 0 ou maior!' }),
   storage: z.number().refine(storage => storage >= 0, { message: 'O estoque deve ser 0 ou maior!' }),
-  publishDate: z.date({ invalid_type_error: 'Insira uma data válida!' }).optional(),
+  publishDate: z.date().optional(),
   salespersonId: z.string().min(1, 'O vendedor é obrigatório!'),
   category: z.nativeEnum(BookCategory),
 });

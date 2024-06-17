@@ -21,6 +21,6 @@ booksRouter.get('/marvelBooks', getMarvelComicBooks.handle);
 booksRouter.get('/', getBooks.handle);
 booksRouter.get('/:id', findBookById.handle);
 booksRouter.post('/create', uploadFile, createBook.handle);
-booksRouter.put('/:id', uploadFile, updateBook.handle);
+booksRouter.put('/:id', updateBook.handle);
 
 export { booksRouter };

@@ -3,7 +3,11 @@ import { makeUpdateBookUseCase } from '.';
 
 export class UpdateBookController {
   async handle(res: Response, req: Request) {
-    const { author, category, character, description, price, publishDate, storage, title, fileId } = req.body.book;
+    console.log(req);
+
+    const { author, category, character, description, price, publishDate, storage, title, fileId } = JSON.parse(
+      req.body.book
+    );
 
     const file = req.file as Express.Multer.File;
 

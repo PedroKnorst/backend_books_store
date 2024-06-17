@@ -119,6 +119,8 @@ model Image {
   path   String
   Book   Book   @relation(fields: [bookId], references: [id])
   bookId String @unique
+
+  @@map("images")
 }
 
 enum PaymentType {

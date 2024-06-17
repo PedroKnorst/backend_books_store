@@ -6,4 +6,5 @@ export interface GetMarvelComicBooksDTO {
   description: string;
   pageCount: number;
   prices: number[];
+  image: string;
 }

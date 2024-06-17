@@ -20,7 +20,7 @@ export class CreateBookController {
       description,
       price: Number(price),
       storage: Number(storage),
-      publishDate: publishDate && new Date(publishDate),
+      publishDate: publishDate !== '' ? new Date(publishDate) : undefined,
       salespersonId,
       category,
       Image,

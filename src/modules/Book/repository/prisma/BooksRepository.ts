@@ -22,9 +22,12 @@ export class BooksRepository implements IBooksRepository {
         Salesperson: { connect: { id: data.salespersonId } },
         Image: { create: data.Image },
       },
+      include: { Image: true },
     });
 
-    return book;
+    const bookWithImageId = await prisma.book.update({ where: { id: book.id }, data: { imageId: book.Image?.id } });
+
+    return bookWithImageId;
   }
 
   async getBooksWithFilter(filters: IGetBooksFilters): Promise<{
@@ -48,7 +51,7 @@ export class BooksRepository implements IBooksRepository {
 
     if (title) where.title = title;
 
-    const books = await prisma.book.findMany({ where, ...pagination });
+    const books = await prisma.book.findMany({ where, ...pagination, include: { Image: true } });
     const total = await prisma.book.count({ where });
 
     return { books, total };
@@ -71,6 +74,7 @@ export class BooksRepository implements IBooksRepository {
       publishDate: new Date(
         book.dates.find((publishDate: { type: string; date: string }) => publishDate.type === 'onsaleDate').date
       ),
+      image: book.images && book.images.length > 0 ? book.images[0].path : '',
     }));
 
     return { books: filteredBooks, total: total };

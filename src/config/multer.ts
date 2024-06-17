@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -27,6 +28,14 @@ const upload = multer({
   },
 });
 
-const uploadFile = (req: Request, res: Response, next: NextFunction) => upload.single('image')(req, res, next);
+const uploadFile = (req: Request, res: Response, next: NextFunction) => {
+  const folderName = '../../uploads';
+
+  if (!fs.existsSync(folderName)) {
+    fs.mkdirSync(folderName);
+  }
+
+  return upload.single('image')(req, res, next);
+};
 
 export { uploadFile };
