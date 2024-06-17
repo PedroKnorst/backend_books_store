@@ -3,18 +3,14 @@ import { makeUpdateBookUseCase } from '.';
 
 export class UpdateBookController {
   async handle(res: Response, req: Request) {
-    console.log(req);
+    const { author, category, character, description, price, publishDate, storage, title } = req.body;
 
-    const { author, category, character, description, price, publishDate, storage, title, fileId } = JSON.parse(
-      req.body.book
-    );
+    // const file = req.file as Express.Multer.File;
 
-    const file = req.file as Express.Multer.File;
-
-    const Image = {
-      path: file.filename,
-      id: fileId,
-    };
+    // const Image = {
+    //   path: file.filename,
+    //   id: fileId,
+    // };
 
     const { id } = req.params;
 
@@ -28,7 +24,6 @@ export class UpdateBookController {
       publishDate,
       storage,
       title,
-      Image,
     });
 
     return res.json(book);
