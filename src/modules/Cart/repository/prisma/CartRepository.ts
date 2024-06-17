@@ -22,7 +22,7 @@ export class CartRepository implements ICartRepository {
   async removeBookOfCart(data: RemoveBookOfCartDTO): Promise<void> {
     await prisma.cart.update({
       where: { id: data.id },
-      data: { BooksCart: { delete: { id: data.id } }, totalPrice: data.cartTotalPrice },
+      data: { BooksCart: { delete: { id: data.bookCartId } }, totalPrice: data.cartTotalPrice },
       include: { BooksCart: true },
     });
   }

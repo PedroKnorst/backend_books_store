@@ -31,6 +31,7 @@ export class AddOrDeleteBookOfCartUseCase {
       const cart = await this.cartsRepository.removeBookOfCart({
         ...data,
         id: cartExists.id,
+        bookCartId: bookExistsInCart.id,
         cartTotalPrice: cartExists.totalPrice - bookExists.price * bookExistsInCart.quantity,
       });
 

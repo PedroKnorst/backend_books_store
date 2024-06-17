@@ -22,7 +22,7 @@ export class BookCartRepository implements IBooksCartRepository {
     id: string
   ): Promise<{ id: string; bookId: string; quantity: number; totalPrice: number; cartId: string } | null> {
     const bookCart = await prisma.bookCart.findFirst({
-      where: { id: id },
+      where: { id },
     });
 
     return bookCart;

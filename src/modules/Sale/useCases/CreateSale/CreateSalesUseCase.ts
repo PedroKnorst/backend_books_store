@@ -1,4 +1,5 @@
 import { AppError } from '#/http/middlewares/ErrorHandler';
+import { IBooksRepository } from '#/modules/Book/repository/@types/IBooksRepository';
 import { ICartRepository } from '#/modules/Cart/repository/@types/ICartRepository';
 import { ISalespersonRepository } from '#/modules/Salesperson/repository/@types/ISalesperson';
 import { CreateSaleDTO } from '../../dtos/CreateSaleDTO';
@@ -8,7 +9,8 @@ export class CreateSalesUseCase {
   constructor(
     private salesRepository: ISalesRepository,
     private cartsRepository: ICartRepository,
-    private salespersonRepository: ISalespersonRepository
+    private salespersonRepository: ISalespersonRepository,
+    private booksRepository: IBooksRepository
   ) {}
 
   async execute(data: Omit<CreateSaleDTO, 'salespersonId' | 'cartId'>) {
@@ -31,6 +33,9 @@ export class CreateSalesUseCase {
       });
 
       await this.cartsRepository.update({ id: cart.id, bookCartId: bookCart.id });
+
+      if (bookCart.Book)
+        await this.booksRepository.update({ id: bookCart.bookId, storage: bookCart.Book?.storage - bookCart.quantity });
 
       sales.push(sale);
     }

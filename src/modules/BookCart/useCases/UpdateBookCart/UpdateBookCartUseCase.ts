@@ -20,15 +20,21 @@ export class UpdateBookCartUseCase {
 
     const book = await this.booksRepository.findByid(findBookCart?.bookId);
 
-    if (!book) throw new AppError('Este livro não esta no carrinho');
+    if (!book) throw new AppError('Este livro não existe');
 
     const cart = await this.cartRepository.findCartByClient(data.clientId);
 
     if (!cart) throw new AppError('Erro ao encontrar carrinho do cliente');
 
-    const totalPrice = book.price * data.quantity;
+    const totalPrice = book.price;
 
-    const cartTotalPrice = cart?.totalPrice + totalPrice;
+    let cartTotalPrice = cart?.totalPrice;
+
+    if (data.quantity < findBookCart.quantity) {
+      cartTotalPrice = cart?.totalPrice - totalPrice;
+    } else if (data.quantity > findBookCart.quantity) {
+      cartTotalPrice = cart?.totalPrice + totalPrice;
+    }
 
     const bookCart = await this.booksCartRepository.update({ ...data, totalPrice, cartTotalPrice });
 

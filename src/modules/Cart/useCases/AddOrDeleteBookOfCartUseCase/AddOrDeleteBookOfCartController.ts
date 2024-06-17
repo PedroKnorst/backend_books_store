@@ -8,7 +8,7 @@ export class AddOrDeleteBookOfCartController {
 
     const { deleteBook } = req.body;
 
-    const clientId = req.user.clientId;
+    const { clientId } = req.user;
 
     if (!clientId) throw new AppError('Permissão necessária!');
 
