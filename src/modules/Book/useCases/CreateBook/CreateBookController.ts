@@ -3,9 +3,9 @@ import { makeCreateBookUseCase } from '.';
 
 export class CreateBookController {
   async handle(req: Request, res: Response) {
-    const { title, author, character, description, price, storage, publishDate, salespersonId, category } = JSON.parse(
-      req.body.book
-    );
+    const { title, author, character, description, price, storage, publishDate, category } = JSON.parse(req.body.book);
+
+    const salespersonId = req.user.salespersonId;
 
     const requestImage = req.file as Express.Multer.File;
 
