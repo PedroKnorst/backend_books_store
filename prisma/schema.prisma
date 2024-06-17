@@ -63,6 +63,8 @@ model Book {
   storage       Int          @default(0)
   Salesperson   Salesperson  @relation(fields: [salespersonId], references: [id])
   salespersonId String
+  Image         Image?
+  imageId       String?
 
   @@map("books")
 }
@@ -110,6 +112,13 @@ model Payment {
   Sales    Sale[]
 
   @@map("payments")
+}
+
+model Image {
+  id     String @id @default(uuid())
+  path   String
+  Book   Book   @relation(fields: [bookId], references: [id])
+  bookId String @unique
 }
 
 enum PaymentType {

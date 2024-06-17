@@ -1,5 +1,6 @@
 import { IBookCart } from '#/modules/BookCart/entities/BookCart';
 import { ISalesperson } from '#/modules/Salesperson/entities/Salesperson';
+import { Image } from '@prisma/client';
 
 export interface IBook {
   id: string;
@@ -12,6 +13,8 @@ export interface IBook {
   BookCarts?: IBookCart[];
   salespersonId: string | null;
   Salesperson?: ISalesperson;
+  Image?: Image;
+  imageId?: string;
 }
 
 export class Book {
@@ -23,4 +26,5 @@ export class Book {
   price: number;
   storage: number;
   salespersonId: string;
+  imageId?: string;
 }

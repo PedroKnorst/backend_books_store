@@ -3,18 +3,27 @@ import { makeCreateBookUseCase } from '.';
 
 export class CreateBookController {
   async handle(req: Request, res: Response) {
-    const { title, author, character, description, price, storage, publishDate, salespersonId, category } = req.body;
+    const { title, author, character, description, price, storage, publishDate, salespersonId, category } = JSON.parse(
+      req.body.book
+    );
+
+    const requestImage = req.file as Express.Multer.File;
+
+    const Image = {
+      path: requestImage.filename,
+    };
 
     const book = await makeCreateBookUseCase().execute({
       title,
       author,
       character,
       description,
-      price,
-      storage,
-      publishDate: new Date(publishDate),
+      price: Number(price),
+      storage: Number(storage),
+      publishDate: publishDate && new Date(publishDate),
       salespersonId,
       category,
+      Image,
     });
 
     return res.json(book);

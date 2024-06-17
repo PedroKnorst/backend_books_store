@@ -1,5 +1,5 @@
 import prisma from '#/database/PrismaClient';
-import { $Enums, Book, Prisma } from '@prisma/client';
+import { Book, Prisma } from '@prisma/client';
 import { CreateBookDTO } from '../../dtos/CreateBookDTO';
 import { IBooksRepository, IGetBooksFilters, IGetComicBooksFilters } from '../@types/IBooksRepository';
 import { GetMarvelComicBooksDTO } from '../../dtos/GetMarvelComicBooksDTO';
@@ -20,6 +20,7 @@ export class BooksRepository implements IBooksRepository {
         title: data.title,
         category: data.category,
         Salesperson: { connect: { id: data.salespersonId } },
+        Image: { create: data.Image },
       },
     });
 
@@ -82,7 +83,7 @@ export class BooksRepository implements IBooksRepository {
   }
 
   async update(data: UpdateBookDTO): Promise<Book> {
-    const { id, author, category, character, description, price, publishDate, storage, title } = data;
+    const { id, author, category, character, description, price, publishDate, storage, title, Image } = data;
 
     let prismaData: Prisma.BookUpdateInput = {};
 
@@ -101,6 +102,8 @@ export class BooksRepository implements IBooksRepository {
     if (storage) prismaData.storage = storage;
 
     if (title) prismaData.title = title;
+
+    if (Image) prismaData.Image = { update: { where: { id: Image.id }, data: { path: Image.path } } };
 
     const book = await prisma.book.update({ where: { id }, data: prismaData });
 

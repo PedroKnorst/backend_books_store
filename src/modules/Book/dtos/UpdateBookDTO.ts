@@ -1,4 +1,4 @@
-import { BookCategory } from '@prisma/client';
+import { BookCategory, Image } from '@prisma/client';
 
 export interface UpdateBookDTO {
   id: string;
@@ -10,4 +10,5 @@ export interface UpdateBookDTO {
   description?: string;
   price?: number;
   storage?: number;
+  Image?: Omit<Image, 'bookId'>;
 }

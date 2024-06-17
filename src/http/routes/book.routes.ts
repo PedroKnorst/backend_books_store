@@ -5,6 +5,7 @@ import { verifyJWT } from '../middlewares/verifyJWT';
 import { GetBooksWithFilterController } from '#/modules/Book/useCases/GetBooksWithFilter/GetBooksWithFilterController';
 import { FindByIdController } from '#/modules/Book/useCases/FindById/FindByIdController';
 import { UpdateBookController } from '#/modules/Book/useCases/UpdateBook/UpdateBookController';
+import { uploadFile } from '#/config/multer';
 
 const booksRouter = Router();
 
@@ -19,7 +20,7 @@ booksRouter.use(verifyJWT);
 booksRouter.get('/marvelBooks', getMarvelComicBooks.handle);
 booksRouter.get('/', getBooks.handle);
 booksRouter.get('/:id', findBookById.handle);
-booksRouter.post('/create', createBook.handle);
-booksRouter.put('/:id', updateBook.handle);
+booksRouter.post('/create', uploadFile, createBook.handle);
+booksRouter.put('/:id', uploadFile, updateBook.handle);
 
 export { booksRouter };
