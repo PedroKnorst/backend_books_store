@@ -8,8 +8,12 @@ export class GetComicBooksMarvelAPIUseCase {
   async execute(filters: IGetComicBooksFilters) {
     validateSchema(filters, GetComicBooksMarvelAPISchema);
 
-    const { books, total } = await this.booksRepository.getComicBooksFromAPI(filters);
+    if (this.booksRepository.getComicBooksFromAPI) {
+      const { books, total } = await this.booksRepository.getComicBooksFromAPI(filters);
 
-    return { books, total };
+      return { books, total };
+    }
+
+    return { books: [], total: 0 };
   }
 }

@@ -15,7 +15,7 @@ export interface IClient {
 
 export class Client {
   id: string;
-  paymentId: string;
+  paymentId: string | null;
   userId: string;
   cartId: string;
 

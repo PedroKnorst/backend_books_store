@@ -13,18 +13,20 @@ export class CreateBookController {
       path: requestImage.filename,
     };
 
-    const book = await makeCreateBookUseCase().execute({
-      title,
-      author,
-      character,
-      description,
-      price: Number(price),
-      storage: Number(storage),
-      publishDate: publishDate !== '' ? new Date(publishDate) : undefined,
-      salespersonId,
-      category,
-      Image,
-    });
+    const book = await makeCreateBookUseCase().execute(
+      {
+        title,
+        author,
+        character,
+        description,
+        price: Number(price),
+        storage: Number(storage),
+        publishDate: publishDate !== '' ? new Date(publishDate) : undefined,
+        salespersonId,
+        category,
+      },
+      Image
+    );
 
     return res.json(book);
   }

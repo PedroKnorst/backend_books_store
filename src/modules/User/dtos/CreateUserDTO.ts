@@ -1,4 +1,4 @@
-import { Profiles } from '#/@types/enums';
+import { Profiles } from '#/@types/types';
 
 export interface CreateUserDTO {
   name: string;

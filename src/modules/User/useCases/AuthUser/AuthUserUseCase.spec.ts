@@ -1,17 +1,12 @@
-import { assert, beforeEach, describe, expect, it } from 'vitest';
+import { assert, describe, expect, it } from 'vitest';
 import { UsersRepositoryInMemory } from '../../repository/in-memory/UsersRepositoryInMemory';
 import { AuthUserUseCase } from './AuthUserUseCase';
-import { IAuthUser } from '../../dtos/AuthUserDTO';
 import { hash } from 'bcrypt';
 import { AppError } from '#/http/middlewares/ErrorHandler';
 
 const makeSut = async () => {
   const usersRepositoryInMemory = new UsersRepositoryInMemory([
-    {
-      name: 'Marvel',
-      email: 'marvel@gmail.com',
-      password: await hash('12345', 8),
-    },
+    { profile: 'SALESPERSON', name: 'Marvel', email: 'marvel@gmail.com', password: await hash('12345', 8) },
   ]);
 
   const sut = new AuthUserUseCase(usersRepositoryInMemory);

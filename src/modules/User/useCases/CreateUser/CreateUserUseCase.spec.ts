@@ -17,12 +17,18 @@ let userMock: CreateUserDTO;
 
 describe('Name of the group', () => {
   beforeEach(() => {
-    userMock = { email: 'pedro@gmail.com', name: 'Pedro', password: '1234', phone: '5199999999' };
+    userMock = {
+      email: 'pedro@gmail.com',
+      name: 'Pedro',
+      password: '1234',
+      phone: '5199999999',
+      profile: 'SALESPERSON',
+    };
     currentSut = makeSut().sut;
   });
 
   it('should create an user', async () => {
-    const user = await currentSut.execute(userMock);
+    const { user } = await currentSut.execute(userMock);
 
     expect(user.name).toBe('Pedro');
   });

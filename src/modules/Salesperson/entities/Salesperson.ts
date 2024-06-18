@@ -15,7 +15,7 @@ export interface ISalesperson {
 export class Salesperson {
   id: string;
   userId: string;
-  balance: number;
+  balance: number | null;
 
   constructor(props: ISalesperson) {
     if (!props.id) {

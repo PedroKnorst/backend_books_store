@@ -1,4 +1,4 @@
-import { BookCategory, Image } from '@prisma/client';
+import { BookCategory } from '@prisma/client';
 
 export interface CreateBookDTO {
   title: string;
@@ -10,5 +10,4 @@ export interface CreateBookDTO {
   publishDate?: Date;
   salespersonId: string;
   category: BookCategory;
-  Image?: Pick<Image, 'path'>;
 }

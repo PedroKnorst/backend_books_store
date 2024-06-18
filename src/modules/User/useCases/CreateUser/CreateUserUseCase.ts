@@ -9,7 +9,6 @@ import { makeCreateClientUseCase } from '#/modules/Client/useCases';
 import { makeCreateSalespersonUseCase } from '#/modules/Salesperson/useCases/CreateSalesperson';
 import jwt from 'jsonwebtoken';
 import { config } from 'dotenv-safe';
-import { ICartRepository } from '#/modules/Cart/repository/@types/ICartRepository';
 
 config();
 

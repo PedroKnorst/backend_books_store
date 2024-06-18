@@ -1,5 +1,5 @@
-import { BookCart } from '@prisma/client';
 import { UpdateBookCartDTO } from '../../dtos/UpdateBookCartDTO';
+import { BookCart } from '../../entities/BookCart';
 
 export interface IBooksCartRepository {
   update(data: UpdateBookCartDTO): Promise<BookCart>;

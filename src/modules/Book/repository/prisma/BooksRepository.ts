@@ -1,14 +1,15 @@
 import prisma from '#/database/PrismaClient';
-import { Book, Prisma } from '@prisma/client';
+import { Image, Prisma } from '@prisma/client';
 import { CreateBookDTO } from '../../dtos/CreateBookDTO';
 import { IBooksRepository, IGetBooksFilters, IGetComicBooksFilters } from '../@types/IBooksRepository';
 import { GetMarvelComicBooksDTO } from '../../dtos/GetMarvelComicBooksDTO';
 import { getMarvelComicBooks } from '#/http/services/MarvelAPI/comicBooks.routes';
 import { AppError } from '#/http/middlewares/ErrorHandler';
 import { UpdateBookDTO } from '../../dtos/UpdateBookDTO';
+import { Book } from '../../entities/Book';
 
 export class BooksRepository implements IBooksRepository {
-  async create(data: CreateBookDTO): Promise<Book> {
+  async create(data: CreateBookDTO, image: Pick<Image, 'path'>): Promise<Book> {
     const book = await prisma.book.create({
       data: {
         author: data.author,
@@ -20,7 +21,7 @@ export class BooksRepository implements IBooksRepository {
         title: data.title,
         category: data.category,
         Salesperson: { connect: { id: data.salespersonId } },
-        Image: { create: data.Image },
+        Image: { create: { path: image.path } },
       },
       include: { Image: true },
     });
