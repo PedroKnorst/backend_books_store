@@ -1,5 +1,6 @@
 import { AppError } from '#/http/middlewares/ErrorHandler';
 import { IBooksRepository } from '#/modules/Book/repository/@types/IBooksRepository';
+import { IBookCart } from '#/modules/BookCart/entities/BookCart';
 import { ICartRepository } from '#/modules/Cart/repository/@types/ICartRepository';
 import { ISalespersonRepository } from '#/modules/Salesperson/repository/@types/ISalesperson';
 import { CreateSaleDTO } from '../../dtos/CreateSaleDTO';
@@ -20,12 +21,12 @@ export class CreateSalesUseCase {
 
     let sales = [];
 
-    for (let index = 0; index < cart.BooksCart.length; index++) {
-      const Salesperson = cart.BooksCart[index].Book?.Salesperson;
+    for (let index = 0; index < (cart.BooksCart as IBookCart[]).length; index++) {
+      const Salesperson = (cart.BooksCart as IBookCart[])[index].Book?.Salesperson;
       if (!Salesperson) throw new AppError('O vendedor não existe');
       const sale = await this.salesRepository.create({ ...data, salespersonId: Salesperson.id, cartId: cart.id });
 
-      const bookCart = cart.BooksCart[index];
+      const bookCart = (cart.BooksCart as IBookCart[])[index];
 
       await this.salespersonRepository.update({
         id: Salesperson.id,

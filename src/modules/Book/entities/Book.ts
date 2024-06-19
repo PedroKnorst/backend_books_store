@@ -12,12 +12,12 @@ export interface IBook {
   price: number;
   storage: number;
   category: BookCategory;
-  publishDate?: Date;
+  publishDate?: Date | null;
   BookCarts?: IBookCart[];
   salespersonId: string | null;
   Salesperson?: ISalesperson;
   Image?: Image;
-  imageId?: string;
+  imageId?: string | null;
 }
 
 export class Book {

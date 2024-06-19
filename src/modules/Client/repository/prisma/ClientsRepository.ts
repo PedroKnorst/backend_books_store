@@ -1,7 +1,7 @@
 import prisma from '#/database/PrismaClient';
-import { Client } from '@prisma/client';
 import { IClientsRepository } from '../@types';
 import { CreateClientDTO } from '../../dtos/CreateClientDTO';
+import { Client } from '../../entities/Client';
 
 export class ClientsRepository implements IClientsRepository {
   async create(data: CreateClientDTO): Promise<Client> {

@@ -5,23 +5,28 @@ import { v4 } from 'uuid';
 
 export interface IClient {
   id: string;
-  User: IUser;
+  User?: IUser;
   userId: string;
-  Payment: IPayment;
+  Payment?: IPayment;
   paymentId: string;
-  Cart: ICart;
+  Cart?: ICart;
   cartId: string;
 }
 
 export class Client {
   id: string;
   paymentId: string | null;
+  User?: IUser | null;
+  Payment?: IPayment | null;
+  Cart?: ICart | null;
   userId: string;
   cartId: string;
 
-  constructor(props: IClient) {
-    if (!props.id) {
-      props.id = v4();
+  constructor(props: Omit<IClient, 'id'>, id?: string) {
+    if (!id) {
+      this.id = v4();
+    } else {
+      this.id = id;
     }
 
     Object.assign(this, props);

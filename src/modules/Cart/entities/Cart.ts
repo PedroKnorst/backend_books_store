@@ -14,8 +14,11 @@ export interface ICart {
 
 export class Cart {
   id: string;
-  clientId: string;
+  clientId?: string | null;
+  Sales?: ISale[];
+  Client?: IClient;
   totalPrice: number;
+  BooksCart?: IBookCart[];
 
   constructor(props: ICart) {
     if (!props.id) {

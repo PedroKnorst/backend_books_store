@@ -1,6 +1,6 @@
-import { Salesperson } from '@prisma/client';
 import { CreateSalespersonDTO } from '../../dtos/CreateSalespersonDTO';
 import { UpdateSalespersonDTO } from '../../dtos/UpdateSalespersonDTO';
+import { Salesperson } from '../../entities/Salesperson';
 
 export interface ISalespersonRepository {
   create(data: CreateSalespersonDTO): Promise<Salesperson>;

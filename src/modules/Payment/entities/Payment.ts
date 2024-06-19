@@ -6,13 +6,17 @@ import { v4 } from 'uuid';
 export interface IPayment {
   id: string;
   type: PaymentType;
-  Clients: IClient[];
-  Sales: ISale[];
+  clientId: string | null;
+  Client?: IClient | null;
+  Sales?: ISale[];
 }
 
 export class Payment {
   ìd: string;
   type: PaymentType;
+  clientId: string | null;
+  Client?: IClient | null;
+  Sales?: ISale[];
 
   constructor(props: IPayment) {
     if (!props.id) {

@@ -1,12 +1,11 @@
-import { Cart } from '@prisma/client';
 import { AddBookToCartDTO } from '../../dtos/AddBookToCartDTO';
 import { RemoveBookOfCartDTO } from '../../dtos/RemoveBookOfCartDTO';
-import { ICart } from '../../entities/Cart';
+import { Cart } from '../../entities/Cart';
 
 export interface ICartRepository {
   addBookToCart(data: AddBookToCartDTO): Promise<Cart>;
-  removeBookOfCart(data: RemoveBookOfCartDTO): Promise<void>;
-  findCartByClient(clientId: string): Promise<ICart | null>;
+  removeBookOfCart(data: RemoveBookOfCartDTO): Promise<Cart>;
+  findCartByClient(clientId: string): Promise<Cart | null>;
   create(): Promise<Cart>;
   update(data: { clientId?: string; id: string; bookCartId?: string }): Promise<Cart>;
 }

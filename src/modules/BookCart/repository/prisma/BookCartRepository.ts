@@ -1,11 +1,10 @@
 import prisma from '#/database/PrismaClient';
 import { UpdateBookCartDTO } from '../../dtos/UpdateBookCartDTO';
+import { BookCart } from '../../entities/BookCart';
 import { IBooksCartRepository } from '../@types/IBooksCartRepository';
 
 export class BookCartRepository implements IBooksCartRepository {
-  async update(
-    data: UpdateBookCartDTO
-  ): Promise<{ id: string; bookId: string; quantity: number; totalPrice: number; cartId: string }> {
+  async update(data: UpdateBookCartDTO): Promise<BookCart> {
     const bookCart = await prisma.bookCart.update({
       where: { id: data.id },
       data: {
@@ -18,9 +17,7 @@ export class BookCartRepository implements IBooksCartRepository {
     return bookCart;
   }
 
-  async findById(
-    id: string
-  ): Promise<{ id: string; bookId: string; quantity: number; totalPrice: number; cartId: string } | null> {
+  async findById(id: string): Promise<BookCart | null> {
     const bookCart = await prisma.bookCart.findFirst({
       where: { id },
     });
@@ -28,9 +25,7 @@ export class BookCartRepository implements IBooksCartRepository {
     return bookCart;
   }
 
-  async findByBookId(
-    bookId: string
-  ): Promise<{ id: string; bookId: string; quantity: number; totalPrice: number; cartId: string } | null> {
+  async findByBookId(bookId: string): Promise<BookCart | null> {
     const bookCart = await prisma.bookCart.findFirst({ where: { bookId } });
 
     return bookCart;

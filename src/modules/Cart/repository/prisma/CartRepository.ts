@@ -1,12 +1,12 @@
 import prisma from '#/database/PrismaClient';
 import { AddBookToCartDTO } from '../../dtos/AddBookToCartDTO';
 import { RemoveBookOfCartDTO } from '../../dtos/RemoveBookOfCartDTO';
+import { Cart } from '../../entities/Cart';
 import { ICartRepository } from '../@types/ICartRepository';
-import { ICart } from '../../entities/Cart';
 import { Prisma } from '@prisma/client';
 
 export class CartRepository implements ICartRepository {
-  async addBookToCart(data: AddBookToCartDTO): Promise<{ id: string; totalPrice: number; clientId: string | null }> {
+  async addBookToCart(data: AddBookToCartDTO): Promise<Cart> {
     const cart = await prisma.cart.update({
       where: { id: data.id },
       data: {
@@ -19,15 +19,17 @@ export class CartRepository implements ICartRepository {
     return cart;
   }
 
-  async removeBookOfCart(data: RemoveBookOfCartDTO): Promise<void> {
-    await prisma.cart.update({
+  async removeBookOfCart(data: RemoveBookOfCartDTO): Promise<Cart> {
+    const cart = await prisma.cart.update({
       where: { id: data.id },
       data: { BooksCart: { delete: { id: data.bookCartId } }, totalPrice: data.cartTotalPrice },
       include: { BooksCart: true },
     });
+
+    return cart;
   }
 
-  async findCartByClient(clientId: string): Promise<ICart | null> {
+  async findCartByClient(clientId: string): Promise<Cart | null> {
     const cart = await prisma.cart.findFirst({
       where: { clientId },
       include: { BooksCart: { include: { Book: { include: { Salesperson: true } } } } },
@@ -36,17 +38,13 @@ export class CartRepository implements ICartRepository {
     return cart;
   }
 
-  async create(): Promise<{ id: string; totalPrice: number; clientId: string | null }> {
+  async create(): Promise<Cart> {
     const cart = await prisma.cart.create({ data: {} });
 
     return cart;
   }
 
-  async update(data: {
-    clientId?: string;
-    id: string;
-    bookCartId?: string;
-  }): Promise<{ id: string; totalPrice: number; clientId: string | null }> {
+  async update(data: { clientId?: string; id: string; bookCartId?: string }): Promise<Cart> {
     let dataPrisma: Prisma.CartUpdateInput = {};
 
     if (data.clientId) {
