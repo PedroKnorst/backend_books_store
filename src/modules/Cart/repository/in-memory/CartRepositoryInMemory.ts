@@ -6,6 +6,25 @@ import { ICartRepository } from '../@types/ICartRepository';
 export class CartRepositoryInMemory implements ICartRepository {
   carts: Cart[] = [];
 
+  constructor(seeds?: boolean) {
+    if (seeds) {
+      this.carts.push({
+        id: 'cartId1',
+        totalPrice: 0,
+        clientId: 'clientId1',
+        BooksCart: [
+          {
+            bookId: 'bookId5',
+            cartId: 'cartId1',
+            id: 'bookCartId5',
+            quantity: 2,
+            totalPrice: 40,
+          },
+        ],
+      });
+    }
+  }
+
   async addBookToCart(data: AddBookToCartDTO): Promise<Cart> {
     const { bookId, cartTotalPrice, quantity, totalPrice } = data;
 

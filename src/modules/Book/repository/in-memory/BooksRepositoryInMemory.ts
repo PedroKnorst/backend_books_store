@@ -19,6 +19,28 @@ export class BooksRepositoryInMemory implements IBooksRepository {
         storage: 5,
         title: 'Homem de Ferro 1',
       });
+      this.books.push({
+        id: 'bookId3',
+        author: 'Stan Lee',
+        category: 'ACTION',
+        character: 'Homem de Ferro',
+        description: 'Homem de Ferro descrição',
+        price: 20,
+        salespersonId: 'salespersonId1',
+        storage: 5,
+        title: 'Homem de Ferro 3',
+      });
+      this.books.push({
+        id: 'bookId5',
+        author: 'Stan Lee',
+        category: 'ACTION',
+        character: 'Homem de Ferro',
+        description: 'Vingadores Guerra Infinita descrição',
+        price: 20,
+        salespersonId: 'salespersonId1',
+        storage: 5,
+        title: 'Vingadores Guerra Infinita',
+      });
     }
   }
 

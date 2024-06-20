@@ -21,10 +21,13 @@ export class AddOrDeleteBookOfCartUseCase {
 
     const cartExists = await this.cartsRepository.findCartByClient(data.clientId);
 
-    if (!cartExists) throw new AppError('Este carrinho não pertence a este cliente');
+    if (!cartExists) throw new AppError('Nenhum carrinho foi encontrado');
 
     if (deleteBook) {
-      const bookExistsInCart = await this.booksCartRepository.findByBookId(bookExists.id);
+      const bookExistsInCart = await this.booksCartRepository.findByBookAndCartId({
+        bookId: bookExists.id,
+        cartId: cartExists.id,
+      });
 
       if (!bookExistsInCart) throw new AppError('O livro não existe neste carrinho');
 
@@ -38,7 +41,10 @@ export class AddOrDeleteBookOfCartUseCase {
       return cart;
     }
 
-    const bookExistsInCart = await this.booksCartRepository.findByBookId(bookExists.id);
+    const bookExistsInCart = await this.booksCartRepository.findByBookAndCartId({
+      bookId: bookExists.id,
+      cartId: cartExists.id,
+    });
 
     if (bookExistsInCart) throw new AppError('Este livro ja foi adicionado ao carrinho');
 

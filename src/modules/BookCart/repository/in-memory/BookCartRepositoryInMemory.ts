@@ -22,6 +22,13 @@ export class BooksCartRepositoryInMemory implements IBooksCartRepository {
         quantity: 2,
         totalPrice: 60,
       });
+      this.booksCart.push({
+        bookId: 'bookId5',
+        cartId: 'cartId1',
+        id: 'bookCartId2',
+        quantity: 2,
+        totalPrice: 60,
+      });
     }
 
     if (addSeeds) {
@@ -31,8 +38,10 @@ export class BooksCartRepositoryInMemory implements IBooksCartRepository {
     }
   }
 
-  async findByBookId(bookId: string): Promise<BookCart | null> {
-    const bookCart = this.booksCart.find(currentBookCart => currentBookCart.bookId === bookId);
+  async findByBookAndCartId(data: { bookId: string; cartId: string }): Promise<BookCart | null> {
+    const bookCart = this.booksCart.find(
+      currentBookCart => currentBookCart.bookId === data.bookId && currentBookCart.cartId === data.cartId
+    );
 
     return bookCart || null;
   }

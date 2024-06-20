@@ -25,8 +25,10 @@ export class BookCartRepository implements IBooksCartRepository {
     return bookCart;
   }
 
-  async findByBookId(bookId: string): Promise<BookCart | null> {
-    const bookCart = await prisma.bookCart.findFirst({ where: { bookId } });
+  async findByBookAndCartId(data: { bookId: string; cartId: string }): Promise<BookCart | null> {
+    const { bookId, cartId } = data;
+
+    const bookCart = await prisma.bookCart.findFirst({ where: { bookId, cartId } });
 
     return bookCart;
   }
