@@ -11,7 +11,7 @@ export class GetCartUseCase {
   async execute(clientId: string) {
     const clientExists = await this.clientsRepository.findById(clientId);
 
-    if (!clientExists) throw new AppError('Cliente não encontrado!');
+    if (!clientExists) throw new AppError('Cliente não encontrado');
 
     const cart = await this.cartsRepository.findCartByClient(clientId);
 

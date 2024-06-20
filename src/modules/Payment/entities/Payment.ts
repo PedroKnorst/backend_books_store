@@ -12,7 +12,7 @@ export interface IPayment {
 }
 
 export class Payment {
-  ìd: string;
+  id: string;
   type: PaymentType;
   clientId: string | null;
   Client?: IClient | null;

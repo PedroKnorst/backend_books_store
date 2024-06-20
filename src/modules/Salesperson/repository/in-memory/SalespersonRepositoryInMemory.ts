@@ -21,13 +21,35 @@ export class SalespersonRepositoryInMemory implements ISalespersonRepository {
     }
   }
 
-  async create(data: CreateSalespersonDTO): Promise<{ id: string; balance: number | null; userId: string }> {}
+  async create(data: CreateSalespersonDTO, id?: string): Promise<Salesperson> {
+    const salesperson = new Salesperson({ ...data, balance: 0 }, id);
 
-  async findById(id: string): Promise<{ id: string; balance: number | null; userId: string } | null> {
-    const salesperson = this.salespersons.find(currentSalesperson => currentSalesperson.id === id);
+    this.salespersons.push(salesperson);
 
     return salesperson;
   }
 
-  async update(data: UpdateSalespersonDTO): Promise<{ id: string; balance: number | null; userId: string }> {}
+  async findById(id: string): Promise<Salesperson | null> {
+    const salesperson = this.salespersons.find(currentSalesperson => currentSalesperson.id === id);
+
+    return salesperson || null;
+  }
+
+  async update(data: UpdateSalespersonDTO): Promise<Salesperson> {
+    const { balance, id } = data;
+
+    const salespersonIndex = this.salespersons.findIndex(currentSalesperson => currentSalesperson.id === id);
+
+    let salesperson = this.salespersons[salespersonIndex];
+
+    salesperson.balance = balance;
+
+    const filteredSalesperson = this.salespersons.filter(currentSalesperson => currentSalesperson.id !== id);
+
+    filteredSalesperson.push(salesperson);
+
+    this.salespersons = filteredSalesperson;
+
+    return salesperson;
+  }
 }

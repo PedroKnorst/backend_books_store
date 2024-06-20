@@ -19,6 +19,43 @@ export class CartRepositoryInMemory implements ICartRepository {
             id: 'bookCartId5',
             quantity: 2,
             totalPrice: 40,
+            Book: {
+              id: 'bookId1',
+              author: 'Stan Lee',
+              category: 'ACTION',
+              character: 'Homem de Ferro',
+              description: 'Homem de Ferro descrição',
+              price: 20,
+              salespersonId: 'salespersonId1',
+              storage: 5,
+              title: 'Homem de Ferro 1',
+              Salesperson: { balance: 0, id: 'salespersonId1', userId: 'userId4' },
+            },
+          },
+        ],
+      });
+      this.carts.push({
+        id: 'cartId5',
+        totalPrice: 0,
+        clientId: 'clientId5',
+        BooksCart: [
+          {
+            bookId: 'bookId1',
+            cartId: 'cartId5',
+            id: 'bookCartId5',
+            quantity: 2,
+            totalPrice: 40,
+            Book: {
+              id: 'bookId1',
+              author: 'Stan Lee',
+              category: 'ACTION',
+              character: 'Homem de Ferro',
+              description: 'Homem de Ferro descrição',
+              price: 20,
+              salespersonId: 'salespersonId1',
+              storage: 5,
+              title: 'Homem de Ferro 1',
+            },
           },
         ],
       });

@@ -8,7 +8,9 @@
     "dev": "tsx watch src/http/server.ts",
     "migrate": "npx prisma migrate dev",
     "create-and-start": "docker-compose up -d && npm run migrate && npm run dev",
-    "test": "vitest"
+    "test": "vitest",
+    "seeCoverage": "npx vite preview --outDir ./coverage",
+    "createCoverage": "npx vitest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +29,7 @@
     "@types/node": "^20.12.12",
     "@types/uuid": "^9.0.8",
     "@vitest/coverage-v8": "^1.6.0",
+    "@vitest/ui": "^1.6.0",
     "eslint": "^9.3.0",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.3.0",

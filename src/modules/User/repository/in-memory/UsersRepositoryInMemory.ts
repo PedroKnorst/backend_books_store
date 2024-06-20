@@ -15,8 +15,8 @@ export class UsersRepositoryInMemory implements IUsersRepository {
     }
   }
 
-  async create(data: CreateUserDTO): Promise<User> {
-    const user = new User(data);
+  async create(data: CreateUserDTO, id?: string): Promise<User> {
+    const user = new User(data, id);
 
     this.users.push(user);
 

@@ -4,7 +4,14 @@ import path from 'path';
 export default defineConfig({
   test: {
     coverage: {
-      reporter: ['text', 'json', 'html'],
+      reporter: ['html'],
+      enabled: true,
+      provider: 'v8',
+      include: ['src/modules/**/**UseCase.ts'],
+      exclude: [
+        'src/modules/Book/useCases/GetComicBooksMarvelAPI/GetComicBooksMarvelAPIUseCase.ts',
+        'src/modules/Book/useCases/GetBooksWithFilter/GetBooksWithFilterUseCase.ts',
+      ],
     },
   },
   resolve: {

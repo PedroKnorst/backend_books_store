@@ -5,11 +5,11 @@ import { v4 } from 'uuid';
 
 export interface IClient {
   id: string;
-  User?: IUser;
+  User?: IUser | null;
   userId: string;
-  Payment?: IPayment;
-  paymentId: string;
-  Cart?: ICart;
+  Payment?: IPayment | null;
+  paymentId?: string | null;
+  Cart?: ICart | null;
   cartId: string;
 }
 

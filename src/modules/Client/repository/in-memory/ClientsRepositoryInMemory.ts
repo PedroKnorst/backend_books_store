@@ -5,8 +5,19 @@ import { IClientsRepository } from '../@types';
 export class ClientsRepositoryInMemory implements IClientsRepository {
   clients: Client[] = [];
 
-  async create(data: CreateClientDTO): Promise<Client> {
-    const client = new Client({ ...data, paymentId: 'paymentId1' });
+  constructor(seeds?: boolean) {
+    if (seeds) {
+      this.clients.push({
+        cartId: 'cartId8',
+        id: 'clientId8',
+        paymentId: 'paymentId2',
+        userId: 'userId7',
+      });
+    }
+  }
+
+  async create(data: CreateClientDTO, id?: string): Promise<Client> {
+    const client = new Client({ ...data, paymentId: 'paymentId1' }, id);
 
     this.clients.push(client);
 
