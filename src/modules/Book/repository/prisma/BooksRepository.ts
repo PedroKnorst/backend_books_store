@@ -26,7 +26,11 @@ export class BooksRepository implements IBooksRepository {
       include: { Image: true },
     });
 
-    const bookWithImageId = await prisma.book.update({ where: { id: book.id }, data: { imageId: book.Image?.id } });
+    const bookWithImageId = await prisma.book.update({
+      where: { id: book.id },
+      data: { imageId: book.Image?.id },
+      include: { Image: true },
+    });
 
     return bookWithImageId;
   }
@@ -35,22 +39,45 @@ export class BooksRepository implements IBooksRepository {
     total: number;
     books: Book[];
   }> {
-    const { page, size, author, character, title, salespersonId } = filters;
+    const { page, size, author, character, title, salespersonId, category, publishDateEnds, publishDateStarts } =
+      filters;
 
-    const where: Prisma.BookWhereInput = {};
+    let where: Prisma.BookWhereInput = {};
 
     const pagination = {
-      skip: page <= 1 ? 0 : (page - 1) * size, //Skip the first n Books.
+      skip: page && size && (page <= 1 ? 0 : (page - 1) * size), //Skip the first n Books.
       take: size, //Take ±n Books from the position of the cursor.
     };
 
+    if (category) where.category = category;
+
     if (salespersonId) where.salespersonId = salespersonId;
 
-    if (author) where.author = author;
+    if (publishDateEnds && !publishDateStarts) {
+      where.publishDate = { lte: new Date(publishDateEnds) };
+    }
 
-    if (character) where.character = character;
+    if (!publishDateEnds && publishDateStarts) {
+      where.publishDate = { gte: new Date(publishDateStarts) };
+    }
 
-    if (title) where.title = title;
+    if (publishDateEnds && publishDateStarts) {
+      where.publishDate = {
+        gte: new Date(publishDateStarts),
+        lte: new Date(publishDateEnds),
+      };
+    }
+
+    if (author || character || title) {
+      where = {
+        ...where,
+        OR: [
+          { title: { contains: title, mode: 'insensitive' } },
+          { author: { contains: author, mode: 'insensitive' } },
+          { character: { contains: character, mode: 'insensitive' } },
+        ],
+      };
+    }
 
     const books = await prisma.book.findMany({ where, ...pagination, include: { Image: true } });
     const total = await prisma.book.count({ where });
@@ -82,7 +109,7 @@ export class BooksRepository implements IBooksRepository {
   }
 
   async findByid(id: string): Promise<Book | null> {
-    const book = await prisma.book.findFirst({ where: { id } });
+    const book = await prisma.book.findFirst({ where: { id }, include: { Image: true } });
 
     return book;
   }

@@ -1,16 +1,19 @@
-import { Image } from '@prisma/client';
+import { BookCategory, Image } from '@prisma/client';
 import { CreateBookDTO } from '../../dtos/CreateBookDTO';
 import { GetMarvelComicBooksDTO } from '../../dtos/GetMarvelComicBooksDTO';
 import { UpdateBookDTO } from '../../dtos/UpdateBookDTO';
 import { Book } from '../../entities/Book';
 
 export interface IGetBooksFilters {
-  page: number;
-  size: number;
+  page?: number;
+  size?: number;
   salespersonId?: string;
   title?: string;
   author?: string;
   character?: string;
+  category?: BookCategory;
+  publishDateStarts?: string;
+  publishDateEnds?: string;
 }
 
 export interface IGetComicBooksFilters {
