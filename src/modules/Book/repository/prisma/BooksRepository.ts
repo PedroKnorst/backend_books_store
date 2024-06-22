@@ -88,11 +88,37 @@ export class BooksRepository implements IBooksRepository {
   async getComicBooksFromAPI(
     filters: IGetComicBooksFilters
   ): Promise<{ total: number; books: GetMarvelComicBooksDTO[] }> {
-    const { books, total } = await getMarvelComicBooks(filters).catch(error => {
+    const { characters, creators, page, size, startYear, title } = filters;
+
+    const requestFilters = {} as IGetComicBooksFilters;
+
+    // if (characters) requestFilters.characters = characters;
+    // if (creators) requestFilters.creators = creators;
+    if (page) requestFilters.page = page;
+    if (size) requestFilters.size = size;
+    if (startYear) requestFilters.startYear = startYear;
+    if (title) requestFilters.title = title;
+
+    const { books, total } = await getMarvelComicBooks(requestFilters).catch(error => {
       throw new AppError(error.message);
     });
 
     const filteredBooks: GetMarvelComicBooksDTO[] = books.map((book: any) => ({
+      id: book.id,
+      title: book.title,
+      image: book.images && book.images.length > 0 ? book.images[0].path + '.' + book.images[0].extension : '',
+    }));
+
+    return { books: filteredBooks, total: total };
+  }
+
+  async findComicBookById(digitalId: string): Promise<GetMarvelComicBooksDTO> {
+    const { books } = await getMarvelComicBooks({ digitalId }).catch(error => {
+      throw new AppError(error.message);
+    });
+
+    const filteredBook: GetMarvelComicBooksDTO[] = books.map((book: any) => ({
+      id: book.id,
       title: book.title,
       description: book.description,
       pageCount: book.pageCount,
@@ -102,10 +128,10 @@ export class BooksRepository implements IBooksRepository {
       publishDate: new Date(
         book.dates.find((publishDate: { type: string; date: string }) => publishDate.type === 'onsaleDate').date
       ),
-      image: book.images && book.images.length > 0 ? book.images[0].path : '',
+      image: book.images && book.images.length > 0 ? book.images[0].path + '.' + book.images[0].extension : '',
     }));
 
-    return { books: filteredBooks, total: total };
+    return filteredBook[0];
   }
 
   async findByid(id: string): Promise<Book | null> {

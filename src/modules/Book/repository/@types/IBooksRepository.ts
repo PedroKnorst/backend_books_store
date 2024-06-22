@@ -17,8 +17,13 @@ export interface IGetBooksFilters {
 }
 
 export interface IGetComicBooksFilters {
-  page: number;
-  size: number;
+  digitalId?: string;
+  page?: number;
+  size?: number;
+  title?: string;
+  startYear?: string;
+  characters?: string;
+  creators?: string;
 }
 
 export interface IBooksRepository {
@@ -27,4 +32,5 @@ export interface IBooksRepository {
   getComicBooksFromAPI?(filters: IGetComicBooksFilters): Promise<{ total: number; books: GetMarvelComicBooksDTO[] }>;
   findByid(id: string): Promise<Book | null>;
   update(data: UpdateBookDTO): Promise<Book>;
+  findComicBookById?(digitalId: string): Promise<GetMarvelComicBooksDTO | null>;
 }
