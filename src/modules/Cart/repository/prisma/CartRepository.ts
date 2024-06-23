@@ -1,6 +1,7 @@
 import prisma from '#/database/PrismaClient';
 import { AddBookToCartDTO } from '../../dtos/AddBookToCartDTO';
 import { RemoveBookOfCartDTO } from '../../dtos/RemoveBookOfCartDTO';
+import { UpdateCartDTO } from '../../dtos/UpdateCartDTO';
 import { Cart } from '../../entities/Cart';
 import { ICartRepository } from '../@types/ICartRepository';
 import { Prisma } from '@prisma/client';
@@ -32,7 +33,7 @@ export class CartRepository implements ICartRepository {
   async findCartByClient(clientId: string): Promise<Cart | null> {
     const cart = await prisma.cart.findFirst({
       where: { clientId },
-      include: { BooksCart: { include: { Book: { include: { Salesperson: true } } } } },
+      include: { BooksCart: { include: { Book: { include: { Salesperson: true, Image: true } } } } },
     });
 
     return cart;
@@ -44,20 +45,26 @@ export class CartRepository implements ICartRepository {
     return cart;
   }
 
-  async update(data: { clientId?: string; id: string; bookCartId?: string }): Promise<Cart> {
+  async update(data: UpdateCartDTO): Promise<Cart> {
     let dataPrisma: Prisma.CartUpdateInput = {};
 
-    if (data.clientId) {
-      dataPrisma.clientId = data.clientId;
+    const { id, bookCartId, clientId, totalPrice } = data;
+
+    if (clientId) {
+      dataPrisma.clientId = clientId;
     }
 
-    if (data.bookCartId) {
-      dataPrisma.BooksCart = { disconnect: { id: data.bookCartId } };
+    if (bookCartId) {
+      dataPrisma.BooksCart = { delete: { id: bookCartId } };
+    }
+
+    if (totalPrice) {
+      dataPrisma.totalPrice = totalPrice;
     }
 
     const cart = await prisma.cart.update({
       data: dataPrisma,
-      where: { id: data.id },
+      where: { id },
     });
 
     return cart;

@@ -33,7 +33,7 @@ export class CreateSalesUseCase {
         balance: (Salesperson.balance || 0) + bookCart.totalPrice,
       });
 
-      await this.cartsRepository.update({ id: cart.id, bookCartId: bookCart.id });
+      await this.cartsRepository.update({ id: cart.id, bookCartId: bookCart.id, totalPrice: 0 });
 
       if (bookCart.Book)
         await this.booksRepository.update({ id: bookCart.bookId, storage: bookCart.Book?.storage - bookCart.quantity });

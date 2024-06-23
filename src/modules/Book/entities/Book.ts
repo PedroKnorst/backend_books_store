@@ -16,7 +16,7 @@ export interface IBook {
   BookCarts?: IBookCart[];
   salespersonId: string | null;
   Salesperson?: ISalesperson;
-  Image?: Image;
+  Image?: Image | null;
   imageId?: string | null;
 }
 
