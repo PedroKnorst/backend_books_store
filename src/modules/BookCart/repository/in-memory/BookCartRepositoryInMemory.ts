@@ -12,8 +12,9 @@ export class BooksCartRepositoryInMemory implements IBooksCartRepository {
         bookId: 'bookId1',
         cartId: 'cartId1',
         id: 'bookCartId1',
-        quantity: 3,
-        totalPrice: 60,
+        quantity: 2,
+        totalPrice: 40,
+        Cart: { totalPrice: 40, BooksCart: [], id: 'cartId1' },
       });
       this.booksCart.push({
         bookId: 'bookId2',
@@ -21,6 +22,7 @@ export class BooksCartRepositoryInMemory implements IBooksCartRepository {
         id: 'bookCartId2',
         quantity: 2,
         totalPrice: 60,
+        Cart: { totalPrice: 60, BooksCart: [], id: 'cartId1' },
       });
       this.booksCart.push({
         bookId: 'bookId5',
@@ -28,6 +30,7 @@ export class BooksCartRepositoryInMemory implements IBooksCartRepository {
         id: 'bookCartId2',
         quantity: 2,
         totalPrice: 60,
+        Cart: { totalPrice: 60, BooksCart: [], id: 'cartId1' },
       });
     }
 

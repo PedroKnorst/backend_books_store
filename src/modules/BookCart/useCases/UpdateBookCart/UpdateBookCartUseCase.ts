@@ -26,14 +26,17 @@ export class UpdateBookCartUseCase {
 
     if (!cart) throw new AppError('Erro ao encontrar carrinho do cliente');
 
-    const totalPrice = book.price;
+    const bookPrice = book.price;
+    let totalPrice = findBookCart.totalPrice;
 
     let cartTotalPrice = cart?.totalPrice;
 
     if (data.quantity < findBookCart.quantity) {
-      cartTotalPrice = cart?.totalPrice - totalPrice;
+      cartTotalPrice = cart?.totalPrice - bookPrice;
+      totalPrice -= bookPrice;
     } else if (data.quantity > findBookCart.quantity) {
-      cartTotalPrice = cart?.totalPrice + totalPrice;
+      cartTotalPrice = cart?.totalPrice + bookPrice;
+      totalPrice += bookPrice;
     }
 
     const bookCart = await this.booksCartRepository.update({ ...data, totalPrice, cartTotalPrice });

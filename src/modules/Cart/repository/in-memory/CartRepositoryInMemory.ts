@@ -10,7 +10,7 @@ export class CartRepositoryInMemory implements ICartRepository {
     if (seeds) {
       this.carts.push({
         id: 'cartId1',
-        totalPrice: 0,
+        totalPrice: 40,
         clientId: 'clientId1',
         BooksCart: [
           {
