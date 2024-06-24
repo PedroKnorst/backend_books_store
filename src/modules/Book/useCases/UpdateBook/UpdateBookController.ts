@@ -2,15 +2,8 @@ import { Request, Response } from 'express';
 import { makeUpdateBookUseCase } from '.';
 
 export class UpdateBookController {
-  async handle(res: Response, req: Request) {
+  async handle(req: Request, res: Response) {
     const { author, category, character, description, price, publishDate, storage, title } = req.body;
-
-    // const file = req.file as Express.Multer.File;
-
-    // const Image = {
-    //   path: file.filename,
-    //   id: fileId,
-    // };
 
     const { id } = req.params;
 
