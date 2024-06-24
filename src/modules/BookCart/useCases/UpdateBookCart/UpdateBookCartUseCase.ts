@@ -12,8 +12,6 @@ export class UpdateBookCartUseCase {
   ) {}
 
   async execute(data: Omit<UpdateBookCartDTO, 'totalPrice' | 'cartTotalPrice'>) {
-    // adicionar validação zod
-
     const findBookCart = await this.booksCartRepository.findById(data.id);
 
     if (!findBookCart?.bookId) throw new AppError('Este livro não esta no carrinho');
