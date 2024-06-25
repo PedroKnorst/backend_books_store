@@ -8,7 +8,7 @@
     "dev": "tsx watch src/http/server.ts",
     "migrate": "npx prisma migrate dev",
     "seeds": "tsx ./prisma/seeds/index.ts",
-    "create-and-start": "docker-compose up -d && npm run migrate && npm run dev",
+    "create-and-start": "docker-compose up -d && npm run migrate && npm run seeds && npm run dev",
     "test": "vitest",
     "seeCoverage": "npx vite preview --outDir ./coverage",
     "createCoverage": "npx vitest --coverage"
