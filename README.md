@@ -1,6 +1,6 @@
-Backend Comic Book Store
+<h1>Backend Comic Book Store</h1>
 
-API da biblioteca virtual de Comic Books, com integração de uma API externa da Marvel
+<h3>API da biblioteca virtual de Comic Books, com integração de uma API externa da Marvel<h3/>
 
 Para rodar o projeto: 
 
